@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:income_expense/screens/login.dart';
+import 'package:income_expense/screens/register.dart';
 
 class OnboardingController extends GetxController {
-  // You can add state management logic here if needed
 }
 
 class onboarding extends StatelessWidget {
@@ -85,7 +86,10 @@ class onboarding extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                // Add your onPressed logic here
+                Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                  return const register();
+                }
+                ));
               },
               child: const Text(
                 'Get Started',
@@ -99,17 +103,17 @@ class onboarding extends StatelessWidget {
                 ),
               ),
               style: TextButton.styleFrom(
-                backgroundColor: Colors.transparent, // Set the default background color to transparent
-                padding: const EdgeInsets.all(16), // Adjust padding as needed
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Remove padding around the button
+                backgroundColor: Colors.transparent,
+                padding: const EdgeInsets.all(16),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),
           ),
           const SizedBox(height: 25),
-          const Text.rich(
+          Text.rich(
             TextSpan(
               children: [
-                TextSpan(
+                const TextSpan(
                   text: 'Already have an account? ',
                   style: TextStyle(
                     color: Color(0xFF444444),
@@ -119,20 +123,31 @@ class onboarding extends StatelessWidget {
                     height: 0,
                   ),
                 ),
-                TextSpan(
-                  text: 'Log In',
-                  style: TextStyle(
-                    color: Color(0xFF438883),
-                    fontSize: 14,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
+                WidgetSpan(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) {
+                          return const login();
+                          },
+                      ));
+                      },
+                    child: const Text(
+                      'Log In',
+                      style: TextStyle(
+                        color: Color(0xFF438883),
+                        fontSize: 14,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
             textAlign: TextAlign.center,
-          ),
+          )
         ],
       ),
     );
