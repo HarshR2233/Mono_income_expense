@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:income_expense/screens/login.dart';
-import 'package:income_expense/screens/register.dart';
+import 'package:income_expense/screens/homescreen.dart';
 
 class OnboardingController extends GetxController {
 }
@@ -87,7 +87,7 @@ class onboarding extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                  return const register();
+                  return const HomeScreen();
                 }
                 ));
               },

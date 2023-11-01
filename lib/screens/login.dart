@@ -29,7 +29,11 @@ class login extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
+            appBar: AppBar(
+        title: Text('Login'),
+              backgroundColor: Color(0xFF438883),
+    ),
     );
   }
 }
