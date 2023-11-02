@@ -87,7 +87,7 @@ class onboarding extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                  return const HomeScreen();
+                  return HomeScreen();
                 }
                 ));
               },

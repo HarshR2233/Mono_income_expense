@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:income_expense/screens/addexpense.dart';
+import 'package:income_expense/screens/transaction.dart';
 //import 'package:get/get.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -113,38 +116,117 @@ class HomeScreen extends StatelessWidget {
             ),
             Row(
               children: [
-                Image.asset('assets/image/Frame5.png',
-                  width: 110,
-                  height: 600,
-                ),
-                  const Text(
-                    'Income',
-                    style: TextStyle(
-                      color: Color(0xFFD0E5E3),
-                      fontSize: 16,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.80,
-                      height: 0,
+                Row(
+                  children: [
+                    Image.asset('assets/image/Frame5.png',
+                      width: 110,
+                      height: 600,
                     ),
-                  ),
-                Image.asset('assets/image/Frame7.png',
-                  width: 110,
-                  height: 600,
+                    const Text(
+                      'Income',
+                      style: TextStyle(
+                        color: Color(0xFFD0E5E3),
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                        letterSpacing: -0.80,
+                      ),
+                    ),
+                  ],
                 ),
-                const Text(
-                  'Expenses',
+                Row(
+                  children: [
+                    Image.asset('assets/image/Frame7.png',
+                      width: 110,
+                      height: 600,
+                    ),
+                    const Text(
+                      'Expenses',
+                      style: TextStyle(
+                        color: Color(0xFFD0E5E3),
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            const Row(
+              children: [
+                Padding(padding: EdgeInsets.fromLTRB(47,320, 0, 0),
+                    child: Text(
+                    '\$ 1849.00',
                   style: TextStyle(
-                    color: Color(0xFFD0E5E3),
-                    fontSize: 16,
+                    color: Colors.white,
+                    fontSize: 24,
                     fontFamily: 'Inter',
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: -0.80,
+                    fontWeight: FontWeight.w600,
                     height: 0,
+                    letterSpacing: -1,
+                  ),
+                    )
+                ),
+                Padding(padding: EdgeInsets.fromLTRB(127, 320, 0, 0),
+                  child: Text(
+                    '\$ 284.00',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                      letterSpacing: -1,
+                    ),
                   ),
                 ),
               ],
-            )
+            ),
+             Row(
+              children: [
+                const Padding(padding: EdgeInsets.fromLTRB(20, 390, 0, 0),
+                  child: Text(
+                      'Transaction History',
+                    style: TextStyle(
+                      color: Color(0xFF222222),
+                      fontSize: 18,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                      letterSpacing: -0.36,
+                    ),
+                  ),
+                ),
+                Padding(padding: const EdgeInsets.fromLTRB(150, 390, 0, 0),
+                  child: TextButton(
+                      onPressed:() {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) {
+                              return const Transaction();
+                            },
+                        ));
+                      },
+                      child: const  Text('See all',style: TextStyle(fontSize: 17),),
+                  ),
+                ),
+              ],
+            ),
+            Padding(padding: const EdgeInsets.fromLTRB(179, 750, 0, 0),
+            child: FloatingActionButton(
+                child: const Icon(Icons.add),
+                backgroundColor: const Color(0xFF438883),
+                onPressed:() {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      return const AddExpense();
+                    })
+                  );
+                }
+            ),
+            ),
           ],
       ),
     );
