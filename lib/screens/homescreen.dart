@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:income_expense/screens/addexpense.dart';
 import 'package:income_expense/screens/transaction.dart';
-//import 'package:get/get.dart';
+import 'package:get/get.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -202,13 +202,9 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Padding(padding: const EdgeInsets.fromLTRB(150, 390, 0, 0),
                   child: TextButton(
-                      onPressed:() {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) {
-                              return const Transaction();
-                            },
-                        ));
-                      },
+                    onPressed: () {
+                      Get.to(() => const Transaction());
+                    },
                       child: const  Text('See all',style: TextStyle(fontSize: 17),),
                   ),
                 ),
@@ -218,13 +214,9 @@ class HomeScreen extends StatelessWidget {
             child: FloatingActionButton(
                 child: const Icon(Icons.add),
                 backgroundColor: const Color(0xFF438883),
-                onPressed:() {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return const AddExpense();
-                    })
-                  );
-                }
+              onPressed: () {
+                Get.to(() => const AddExpense());
+              },
             ),
             ),
           ],
