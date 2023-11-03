@@ -5,20 +5,20 @@ import 'package:income_expense/screens/homescreen.dart';
 
 void mian(){
   runApp(
-     const MaterialApp(
-      home: AddExpense(),
+    const MaterialApp(
+      home: AddIncome(),
     ),
   );
 }
 
-class AddExpense extends StatefulWidget {
-  const AddExpense({super.key});
+class AddIncome extends StatefulWidget {
+  const AddIncome({super.key});
 
   @override
-  State<AddExpense> createState() => _AddExpenseState();
+  State<AddIncome> createState() => _AddIncomeState();
 }
 
-class _AddExpenseState extends State<AddExpense> {
+class _AddIncomeState extends State<AddIncome> {
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
@@ -74,7 +74,7 @@ class _AddExpenseState extends State<AddExpense> {
                 left: 355,
                 child: Image.asset('assets/image/Group19.png')
             ),
-             Row(
+            Row(
               children: [
                 Padding(padding: const EdgeInsets.fromLTRB(25, 80, 0, 0),
                   child: IconButton(onPressed: () {
@@ -85,7 +85,7 @@ class _AddExpenseState extends State<AddExpense> {
                 ),
                 const Padding(padding: EdgeInsets.fromLTRB(80, 80, 0, 0),
                   child: Text(
-                    'Add Expense',
+                    'Add Income',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -98,28 +98,28 @@ class _AddExpenseState extends State<AddExpense> {
               ],
             ),
             Padding(padding: const EdgeInsets.fromLTRB(30, 170, 0, 0),
-              child: Container(
-                width: 358,
-                height: 500,
-                decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                shadows: const [
-                  BoxShadow(
-                    color: Color(0x14000000),
-                    blurRadius: 35,
-                    offset: Offset(0, 22),
-                    spreadRadius: 0,
-                  )
-                ],
-              ),
-            )
+                child: Container(
+                  width: 358,
+                  height: 500,
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    shadows: const [
+                      BoxShadow(
+                        color: Color(0x14000000),
+                        blurRadius: 35,
+                        offset: Offset(0, 22),
+                        spreadRadius: 0,
+                      )
+                    ],
+                  ),
+                )
             ),
             const Row(
               children: [
-                 Padding(padding: EdgeInsets.fromLTRB(60, 200, 0, 0),
+                Padding(padding: EdgeInsets.fromLTRB(60, 200, 0, 0),
                   child: Text(
                     'NAME',
                     style: TextStyle(
@@ -142,59 +142,59 @@ class _AddExpenseState extends State<AddExpense> {
                       child: Container(
                         width: 300,
                         child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          contentPadding: const EdgeInsets.only(right: 10, left: 10),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            contentPadding: const EdgeInsets.only(right: 10, left: 10),
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
                             ),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
                             ),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
                             ),
+                            errorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: 1, color: Colors.red),
+                                borderRadius: BorderRadius.circular(10)),
                           ),
-                          errorBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 1, color: Colors.red),
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        elevation: 1,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Select game';
-                          } else {
-                            return null;
-                          }
-                        },
-                        isExpanded: true,
-                        hint: const Text("Favourite game"),
-                        iconSize: 30,
-                        iconEnabledColor: Colors.black,
-                        icon: const Icon(
-                          Icons.arrow_drop_down_sharp,
-                          size: 15,
-                        ),
-                        value: selectedValue,
-                        items: dropdownItems.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedValue = newValue ?? 'Netflix';
-                          });
+                          elevation: 1,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Select game';
+                            } else {
+                              return null;
+                            }
+                          },
+                          isExpanded: true,
+                          hint: const Text("Favourite game"),
+                          iconSize: 30,
+                          iconEnabledColor: Colors.black,
+                          icon: const Icon(
+                            Icons.arrow_drop_down_sharp,
+                            size: 15,
+                          ),
+                          value: selectedValue,
+                          items: dropdownItems.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedValue = newValue ?? 'Netflix';
+                            });
                           },
                         ),
                       ),
@@ -208,12 +208,12 @@ class _AddExpenseState extends State<AddExpense> {
                   child: Text(
                     'AMOUNT',
                     style: TextStyle(
-                      color: Color(0xFF666666),
-                      fontSize: 12,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 0,
-                      letterSpacing: 0.72
+                        color: Color(0xFF666666),
+                        fontSize: 12,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                        letterSpacing: 0.72
                     ),
                   ),
                 ),
@@ -229,22 +229,22 @@ class _AddExpenseState extends State<AddExpense> {
                       inputFormatters:<TextInputFormatter> [
                         FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                       ],
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFF438883),
-                          width: 1.0,
-                        )
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF438883),
+                              width: 1.0,
+                            )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF438883),
+                              width: 1.0,
+                            )
+                        ),
+                        hintText: 'Enter the Amount',
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFF438883),
-                          width: 1.0,
-                        )
-                      ),
-                      hintText: 'Enter the Amount',
                     ),
-                  ),
                   ),
                 ),
               ],
@@ -274,10 +274,10 @@ class _AddExpenseState extends State<AddExpense> {
                     child: TextFormField(
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFF438883),
-                            width: 1.0,
-                          )
+                            borderSide: BorderSide(
+                              color: Color(0xFF438883),
+                              width: 1.0,
+                            )
                         ),
                         focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
