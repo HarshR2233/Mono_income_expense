@@ -228,7 +228,7 @@ class HomeScreen extends StatelessWidget {
                     labelBackgroundColor: const Color(0xFF2E7E78),
                     backgroundColor: const Color(0xFF2E7E78),
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddIncome()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddIncome()));
                     },
                   ),
                   SpeedDialChild(
@@ -242,7 +242,7 @@ class HomeScreen extends StatelessWidget {
                     labelBackgroundColor: const Color(0xFF2E7E78),
                     backgroundColor: const Color(0xFF2E7E78),
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddExpense()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddExpense()));
                     },
                   )
                 ],
