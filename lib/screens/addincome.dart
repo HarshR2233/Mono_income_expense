@@ -131,41 +131,41 @@ class AddIncome extends StatelessWidget {
                       width: 300,
                       child: Obx(
                             () => DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            contentPadding: const EdgeInsets.only(right: 10, left: 10),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                contentPadding: const EdgeInsets.only(right: 10, left: 10),
+                                border: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                ),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(width: 1, color: Colors.red),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFF438883), width: 1.0),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 1, color: Colors.red),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          elevation: 1,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Select game';
-                            } else {
-                              return null;
-                            }
-                            },
+                              elevation: 1,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Select game';
+                                } else {
+                                  return null;
+                                }
+                                },
                               isExpanded: true,
                               hint: const Text("Favourite game"),
                               iconSize: 30,
@@ -173,18 +173,18 @@ class AddIncome extends StatelessWidget {
                               icon: const Icon(
                                 Icons.arrow_drop_down_sharp,
                                 size: 15,
-                          ),
-                          value: selectedValue.value,
-                          items: dropdownItems.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(item),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            selectedValue.value = newValue ?? 'Netflix';
-                          },
-                        ),
+                              ),
+                              value: selectedValue.value,
+                              items: dropdownItems.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(item),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                selectedValue.value = newValue ?? 'Netflix';
+                                },
+                            ),
                       ),
                     ),
                   ),

@@ -11,7 +11,7 @@ void main() {
       initialRoute: '/splash',
       getPages: [
         GetPage(name: '/splash', page: () => splash()),
-        GetPage(name: '/onboarding', page: () => onboarding()), // Add your destination screen
+        GetPage(name: '/onboarding', page: () => onboarding()),
       ],
     ),
   );

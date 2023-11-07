@@ -205,7 +205,7 @@ class HomeScreen extends StatelessWidget {
               Padding(padding: const EdgeInsets.fromLTRB(150, 390, 0, 0),
                 child: TextButton(
                   onPressed: () {
-                    Get.to(() => const Transaction());
+                    Get.to(() => Transaction());
                   },
                   child: const  Text('See all',style: TextStyle(fontSize: 17),),
                 ),
