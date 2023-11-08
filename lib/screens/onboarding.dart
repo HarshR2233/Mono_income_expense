@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:income_expense/screens/bottom_navigation_bar.dart';
 import 'package:income_expense/screens/login.dart';
 import 'package:income_expense/screens/homescreen.dart';
 
@@ -87,7 +88,7 @@ class onboarding extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                  return HomeScreen();
+                  return CustomBottomNavigationBar();
                 }
                 ));
               },
