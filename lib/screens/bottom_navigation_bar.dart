@@ -1,5 +1,8 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:income_expense/screens/addincome.dart';
+import 'package:income_expense/screens/addexpense.dart';
 import 'homescreen.dart';
 import 'transaction.dart';
 import 'wallet.dart';
@@ -54,11 +57,51 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               label: 'Profile',
             ),
           ],
-          backgroundColor: Colors.transparent,
-          selectedItemColor: Color(0xFF438883),
+          backgroundColor: Colors.white,
+          selectedItemColor: const Color(0xFF438883),
           unselectedItemColor: Colors.grey,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          type: BottomNavigationBarType.fixed,
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: SpeedDial(
+        animationAngle: pi,
+        animatedIcon: AnimatedIcons.add_event,
+        backgroundColor: Color(0xFF2E7E78),
+        animatedIconTheme: const IconThemeData(size: 22.0),
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.add, color: Colors.white),
+            label: 'Add Income',
+            labelStyle: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w500,
+            ),
+            labelBackgroundColor: const Color(0xFF2E7E78),
+            backgroundColor: const Color(0xFF2E7E78),
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => AddIncome()));
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.edit_note_outlined, color: Colors.white),
+            label: 'Add Expense',
+            labelStyle: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w500,
+            ),
+            labelBackgroundColor: const Color(0xFF2E7E78),
+            backgroundColor: const Color(0xFF2E7E78),
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => AddExpense()));
+            },
+          )
+        ],
       ),
     );
   }

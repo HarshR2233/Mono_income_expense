@@ -40,15 +40,15 @@ class Profile extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(25, 80, 0, 0),
                   child: IconButton(
                     onPressed: () {
-                      Get.to(() => HomeScreen()); // Navigate back using GetX
+                      Get.back(); // Navigate back using GetX
                     },
                     icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.fromLTRB(80, 80, 0, 0),
+                  padding: EdgeInsets.fromLTRB(105, 80, 0, 0),
                   child: Text(
-                    'Add Income',
+                    'Profile',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,

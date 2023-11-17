@@ -71,7 +71,7 @@ class AddExpense extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(25, 80, 0, 0),
                   child: IconButton(
                     onPressed: () {
-                      Get.to(() => const HomeScreen());
+                      Get.back();
                     },
                     icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
                   ),

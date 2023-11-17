@@ -1,108 +1,154 @@
 import 'package:flutter/material.dart';
-import 'package:income_expense/screens/addexpense.dart';
-import 'package:income_expense/screens/addincome.dart';
 import 'package:income_expense/screens/transaction.dart';
 import 'package:get/get.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final List<PaymentEntry> paymentHistory = [
+      PaymentEntry(
+        image: 'assets/image/Frame9.png',
+        title: 'Upwork',
+        date: 'Today',
+        amount: '-\$200.00'
+      ),
+      PaymentEntry(
+          image: 'assets/image/Frame2.png',
+          title: 'Transfer',
+          date: 'Yesterday',
+          amount: '-\$20.00'
+      ),
+      PaymentEntry(
+          image: 'assets/image/Frame9(3).png',
+          title: 'Youtube',
+          date: '31/10/2023',
+          amount: '-\$12.00',
+      ),
+      PaymentEntry(
+          image: 'assets/image/Frame9(2).png',
+          title: 'Paypal',
+          date: '20/10/2023',
+          amount: '-\$35.00',
+      ),
+      PaymentEntry(
+          image: 'assets/image/Frame2.png',
+          title: 'Recieved',
+          date: '19/10/2023',
+          amount: '+\$100.00',
+      ),
+      PaymentEntry(
+          image: 'assets/image/Frame3.png',
+          title: 'Trnasfer',
+          date: '15/10/2023',
+          amount: '-\$12.50',
+      ),
+      PaymentEntry(
+          image: 'assets/image/Frame9(2).png',
+          title: 'Paypal',
+          date: '01/10/2023',
+          amount:'+\$100.00',
+      ),
+      PaymentEntry(
+        image: 'assets/image/Frame9(3).png',
+        title: 'Youtube',
+        date: '30/09/2023',
+        amount:'-\$13.00',
+      ),
+    ];
+
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            child: Image.asset('assets/image/Rectangle9.png'),
-          ),
-          Positioned(
-            top: 8,
-            left: 3,
-            child: Image.asset('assets/image/Ellipse7.png'),
-          ),
-          Positioned(
-            top: 8,
-            left: 50,
-            child: Image.asset('assets/image/Ellipse8.png'),
-          ),
-          Positioned(
-            top: 8,
-            left: 120,
-            child: Image.asset('assets/image/Ellipse9.png'),
-          ),
-          Positioned(
-            top: 95,
-            left: 350,
-            child: Image.asset('assets/image/bell1.png'),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Text(
-              'Good Morning,',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-                height: 8,
-              ),
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Positioned(
+              child: Image.asset('assets/image/Rectangle9.png'),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Text(
-              'Harsh Rathod',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-                height: 7.5,
-              ),
+            Positioned(
+              top: 8,
+              left: 3,
+              child: Image.asset('assets/image/Ellipse7.png'),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 160, 0, 0),
-            child: Container(
-              width: 374,
-              height: 201,
-              decoration: ShapeDecoration(
-                color: const Color(0xFF2E7E78),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+            Positioned(
+              top: 8,
+              left: 50,
+              child: Image.asset('assets/image/Ellipse8.png'),
+            ),
+            Positioned(
+              top: 8,
+              left: 120,
+              child: Image.asset('assets/image/Ellipse9.png'),
+            ),
+            Positioned(
+              top: 95,
+              left: 350,
+              child: Image.asset('assets/image/bell1.png'),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(
+                'Good Morning,',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                  height: 8,
                 ),
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(45, 186, 0, 0),
-            child: Text(
-              'Total Balance',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-                height: 0,
-                letterSpacing: -0.32,
+            const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(
+                'Harsh Rathod',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                  height: 7.5,
+                ),
               ),
             ),
-          ),
-          Row(
-            children: [
-              Image.asset('assets/image/chevron.png',
-                width: 300,
-                height: 393,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 160, 0, 0),
+              child: Container(
+                width: 374,
+                height: 201,
+                decoration: ShapeDecoration(
+                  color: const Color(0xFF2E7E78),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
               ),
-              Image.asset('assets/image/Group8.png',
-                width: 99,
-                height: 50,
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(45, 186, 0, 0),
+              child: Text(
+                'Total Balance',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                  height: 0,
+                  letterSpacing: -0.32,
+                ),
               ),
-            ],
-          ),
-          const Padding(
+            ),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/image/chevron.png',
+                  width: 300,
+                  height: 393,
+                ),
+              ],
+            ),
+            const Padding(
               padding: EdgeInsets.fromLTRB(45, 210, 0, 0),
               child: Text(
                 '\$ 2,548.00',
@@ -114,52 +160,55 @@ class HomeScreen extends StatelessWidget {
                   height: 0,
                   letterSpacing: -1.50,
                 ),
-              )
-          ),
-          Row(
-            children: [
-              Row(
-                children: [
-                  Image.asset('assets/image/Frame5.png',
-                    width: 110,
-                    height: 600,
-                  ),
-                  const Text(
-                    'Income',
-                    style: TextStyle(
-                      color: Color(0xFFD0E5E3),
-                      fontSize: 16,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 0,
-                      letterSpacing: -0.80,
-                    ),
-                  ),
-                ],
               ),
-              Row(
-                children: [
-                  Image.asset('assets/image/Frame7.png',
-                    width: 110,
-                    height: 600,
-                  ),
-                  const Text(
-                    'Expenses',
-                    style: TextStyle(
-                      color: Color(0xFFD0E5E3),
-                      fontSize: 16,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 0,
+            ),
+            Row(
+              children: [
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/image/Frame5.png',
+                      width: 110,
+                      height: 600,
                     ),
-                  ),
-                ],
-              )
-            ],
-          ),
-          const Row(
-            children: [
-              Padding(padding: EdgeInsets.fromLTRB(47,320, 0, 0),
+                    const Text(
+                      'Income',
+                      style: TextStyle(
+                        color: Color(0xFFD0E5E3),
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                        letterSpacing: -0.80,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/image/Frame7.png',
+                      width: 110,
+                      height: 600,
+                    ),
+                    const Text(
+                      'Expenses',
+                      style: TextStyle(
+                        color: Color(0xFFD0E5E3),
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            const Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(47, 320, 0, 0),
                   child: Text(
                     '\$ 1849.00',
                     style: TextStyle(
@@ -170,86 +219,111 @@ class HomeScreen extends StatelessWidget {
                       height: 0,
                       letterSpacing: -1,
                     ),
-                  )
-              ),
-              Padding(padding: EdgeInsets.fromLTRB(127, 320, 0, 0),
-                child: Text(
-                  '\$ 284.00',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    height: 0,
-                    letterSpacing: -1,
                   ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              const Padding(padding: EdgeInsets.fromLTRB(20, 390, 0, 0),
-                child: Text(
-                  'Transaction History',
-                  style: TextStyle(
-                    color: Color(0xFF222222),
-                    fontSize: 18,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    height: 0,
-                    letterSpacing: -0.36,
-                  ),
-                ),
-              ),
-              Padding(padding: const EdgeInsets.fromLTRB(150, 390, 0, 0),
-                child: TextButton(
-                  onPressed: () {
-                    Get.to(() => Transaction());
-                  },
-                  child: const  Text('See all',style: TextStyle(fontSize: 17),),
-                ),
-              ),
-            ],
-          ),
-          Padding(padding: const EdgeInsets.fromLTRB(179, 750, 0, 0),
-              child: SpeedDial(
-                animatedIcon: AnimatedIcons.ellipsis_search,
-                animatedIconTheme: const  IconThemeData(size: 22.0),
-                children: [
-                  SpeedDialChild(
-                    child: const Icon(Icons.add,color: Colors.white),
-                    label: 'Add Income',
-                    labelStyle: const TextStyle(
+                Padding(
+                  padding: EdgeInsets.fromLTRB(127, 320, 0, 0),
+                  child: Text(
+                    '\$ 284.00',
+                    style: TextStyle(
                       color: Colors.white,
+                      fontSize: 24,
                       fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                      letterSpacing: -1,
                     ),
-                    labelBackgroundColor: const Color(0xFF2E7E78),
-                    backgroundColor: const Color(0xFF2E7E78),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddIncome()));
-                    },
                   ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.edit_note_outlined,color: Colors.white),
-                    label: 'Add Expense',
-                    labelStyle: const TextStyle(
-                      color: Colors.white,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(20, 390, 0, 0),
+                  child: Text(
+                    'Transaction History',
+                    style: TextStyle(
+                      color: Color(0xFF222222),
+                      fontSize: 18,
                       fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                      letterSpacing: -0.36,
                     ),
-                    labelBackgroundColor: const Color(0xFF2E7E78),
-                    backgroundColor: const Color(0xFF2E7E78),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddExpense()));
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(150, 390, 0, 0),
+                  child: TextButton(
+                    onPressed: () {
+                      Get.to(() => const Transaction());
                     },
-                  )
-                ],
-              )
-          ),
-        ],
+                    child: const Text(
+                      'See all',
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding( padding: const EdgeInsets.only(left: 5,top: 450),
+              child: Container(
+                height: 400,
+                child: ListView.builder(
+                  itemCount: paymentHistory.length,
+                  itemBuilder: (context, index){
+                    return ListTile(
+                      leading: Image.asset(paymentHistory[index].image),
+                      title:Row(
+                        children:[
+                          Text(paymentHistory[index].title,
+                            style: const  TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          Padding(padding: const EdgeInsets.only(left : 140),
+                            child: Text('${paymentHistory[index].amount}',
+                              style: const
+                              TextStyle(
+                                  fontSize: 19,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${paymentHistory[index].date}'),
+                        ],
+                      ),
+                    );
+                    },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+class PaymentEntry {
+  final String image;
+  final String title;
+  final String date;
+  final String amount;
+
+  PaymentEntry({
+    required this.image,
+    required this.title,
+    required this.date,
+    required this.amount,
+});
 }

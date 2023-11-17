@@ -6,9 +6,15 @@ class Wallet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Text(
-        'Hii, Feature not available',
-        textAlign: TextAlign.center,
+      body: Padding(padding: EdgeInsets.fromLTRB(100, 100, 0, 0),
+        child: Text(
+          'Hii, Feature not available',
+          style: TextStyle(
+            fontSize: 18,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }

@@ -32,7 +32,7 @@ class _TransactionState extends State<Transaction> {
                 padding: const EdgeInsets.fromLTRB(25, 70, 0, 0),
                 child: IconButton(
                   onPressed: () {
-                    Get.back(); // Navigate back using GetX
+                    Get.back();
                   },
                   icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.black),
                 ),
