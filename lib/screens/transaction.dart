@@ -38,9 +38,9 @@ class _TransactionState extends State<Transaction> {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.fromLTRB(80, 70, 0, 0),
+                padding: EdgeInsets.fromLTRB(95, 70, 0, 0),
                 child: Text(
-                  'Transactions',
+                  'Statistics',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,

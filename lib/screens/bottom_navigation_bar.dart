@@ -46,7 +46,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.leaderboard_outlined),
-              label: 'Transaction',
+              label: 'Statistics',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_balance_wallet_outlined),
@@ -64,8 +64,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           type: BottomNavigationBarType.fixed,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: SpeedDial(
+      floatingActionButtonLocation: currentTab == 0
+          ? FloatingActionButtonLocation.centerDocked
+          : null, // Show only on the HomeScreen
+      floatingActionButton: currentTab == 0
+          ? SpeedDial(
         animationAngle: pi,
         animatedIcon: AnimatedIcons.add_event,
         backgroundColor: Color(0xFF2E7E78),
@@ -82,8 +85,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             labelBackgroundColor: const Color(0xFF2E7E78),
             backgroundColor: const Color(0xFF2E7E78),
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => AddIncome()));
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AddIncome()),
+              );
             },
           ),
           SpeedDialChild(
@@ -97,12 +101,31 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             labelBackgroundColor: const Color(0xFF2E7E78),
             backgroundColor: const Color(0xFF2E7E78),
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => AddExpense()));
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AddExpense()),
+              );
             },
           )
         ],
+      )
+          : null, // Hide on other screens
+    );
+  }
+}
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Your App Title',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: CustomBottomNavigationBar(),
     );
   }
 }

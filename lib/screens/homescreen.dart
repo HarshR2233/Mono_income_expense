@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:income_expense/screens/transaction.dart';
+import 'package:income_expense/screens/all_transaction.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -162,48 +162,41 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/image/Frame5.png',
-                      width: 110,
-                      height: 600,
-                    ),
-                    const Text(
-                      'Income',
-                      style: TextStyle(
-                        color: Color(0xFFD0E5E3),
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        height: 0,
-                        letterSpacing: -0.80,
-                      ),
-                    ),
-                  ],
+            Padding(padding: const EdgeInsets.only(left: 40,top: 290),
+              child: Image.asset(
+                  'assets/image/Frame5.png'
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 70,top: 293),
+              child: Text(
+                'Income',
+                style: TextStyle(
+                  color: Color(0xFFD0E5E3),
+                  fontSize: 16,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                  height: 0,
+                  letterSpacing: -0.80,
                 ),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/image/Frame7.png',
-                      width: 110,
-                      height: 600,
-                    ),
-                    const Text(
-                      'Expenses',
-                      style: TextStyle(
-                        color: Color(0xFFD0E5E3),
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        height: 0,
-                      ),
-                    ),
-                  ],
+              )
+            ),
+            Padding(padding: const EdgeInsets.only(left: 270,top: 290),
+              child: Image.asset(
+                  'assets/image/Frame7.png'
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 300,top: 294),
+                child: Text(
+                  'Expenses',
+                  style: TextStyle(
+                    color: Color(0xFFD0E5E3),
+                    fontSize: 16,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w500,
+                    height: 0,
+                    letterSpacing: -0.80,
+                  ),
                 )
-              ],
             ),
             const Row(
               children: [
@@ -257,7 +250,7 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(150, 390, 0, 0),
                   child: TextButton(
                     onPressed: () {
-                      Get.to(() => const Transaction());
+                      Get.to(() => const AllTransaction());
                     },
                     child: const Text(
                       'See all',
@@ -271,7 +264,7 @@ class HomeScreen extends StatelessWidget {
               child: Container(
                 height: 400,
                 child: ListView.builder(
-                  itemCount: paymentHistory.length,
+                  itemCount: 4,
                   itemBuilder: (context, index){
                     return ListTile(
                       leading: Image.asset(paymentHistory[index].image),
