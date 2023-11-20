@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:label="income_expense"
-        android:name="${applicationName}"
+        android:name="io.flutter.plugins.FlutterMultiDexApplication"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -16,8 +16,8 @@
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
+                android:name="firebase_firestore_host"
+                android:value="your_firestore_host_url"
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "939625669312",
+    "project_id": "mono-ea6f4",
+    "storage_bucket": "mono-ea6f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939625669312:android:f0b7031da6d2b49c058325",
+        "android_client_info": {
+          "package_name": "com.example.income_expense"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNyXYVVwQfvi-ZhFhTKVImpE34r_PSv88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
