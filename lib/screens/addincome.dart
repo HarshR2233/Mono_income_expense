@@ -47,6 +47,7 @@ class _AddIncomeState extends State<AddIncome> {
 
   Future<void> _submitIncome() async {
     if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).unfocus();
       await incomeCollection.add({
         'amount': _amountController.text,
         'name': selectedValue.value,

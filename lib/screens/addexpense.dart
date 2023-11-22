@@ -45,7 +45,8 @@ class _AddExpenseState extends State<AddExpense> {
     }
   }
 
-  Future<void> _submitIncome() async {
+  Future<void> _submitExpense() async {
+    FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       await expenseCollection.add({
         'amount': _amountController.text,
@@ -323,7 +324,7 @@ class _AddExpenseState extends State<AddExpense> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(50, 20, 0, 0),
                     child: ElevatedButton(
-                      onPressed: _submitIncome,
+                      onPressed: _submitExpense,
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF438883)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
