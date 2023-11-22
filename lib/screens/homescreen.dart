@@ -10,10 +10,10 @@ class HomeScreen extends StatelessWidget {
 
     final List<PaymentEntry> paymentHistory = [
       PaymentEntry(
-        image: 'assets/image/Frame9.png',
-        title: 'Upwork',
-        date: 'Today',
-        amount: '-\$200.00'
+          image: 'assets/image/Frame9.png',
+          title: 'Upwork',
+          date: 'Today',
+          amount: '-\$200.00'
       ),
       PaymentEntry(
           image: 'assets/image/Frame2.png',
@@ -22,34 +22,34 @@ class HomeScreen extends StatelessWidget {
           amount: '-\$20.00'
       ),
       PaymentEntry(
-          image: 'assets/image/Frame9(3).png',
-          title: 'Youtube',
-          date: '31/10/2023',
-          amount: '-\$12.00',
+        image: 'assets/image/Frame9(3).png',
+        title: 'Youtube',
+        date: '31/10/2023',
+        amount: '-\$12.00',
       ),
       PaymentEntry(
-          image: 'assets/image/Frame9(2).png',
-          title: 'Paypal',
-          date: '20/10/2023',
-          amount: '-\$35.00',
+        image: 'assets/image/Frame9(2).png',
+        title: 'Paypal',
+        date: '20/10/2023',
+        amount: '-\$35.00',
       ),
       PaymentEntry(
-          image: 'assets/image/Frame2.png',
-          title: 'Recieved',
-          date: '19/10/2023',
-          amount: '+\$100.00',
+        image: 'assets/image/Frame2.png',
+        title: 'Recieved',
+        date: '19/10/2023',
+        amount: '+\$100.00',
       ),
       PaymentEntry(
-          image: 'assets/image/Frame3.png',
-          title: 'Trnasfer',
-          date: '15/10/2023',
-          amount: '-\$12.50',
+        image: 'assets/image/Frame3.png',
+        title: 'Trnasfer',
+        date: '15/10/2023',
+        amount: '-\$12.50',
       ),
       PaymentEntry(
-          image: 'assets/image/Frame9(2).png',
-          title: 'Paypal',
-          date: '01/10/2023',
-          amount:'+\$100.00',
+        image: 'assets/image/Frame9(2).png',
+        title: 'Paypal',
+        date: '01/10/2023',
+        amount:'+\$100.00',
       ),
       PaymentEntry(
         image: 'assets/image/Frame9(3).png',
@@ -87,7 +87,7 @@ class HomeScreen extends StatelessWidget {
               child: Image.asset('assets/image/bell1.png'),
             ),
             const Padding(
-              padding: EdgeInsets.only(left: 20),
+              padding: EdgeInsets.only(left: 20,top: 33),
               child: Text(
                 'Good Morning,',
                 style: TextStyle(
@@ -100,7 +100,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.only(left: 20),
+              padding: EdgeInsets.only(left: 20, top: 35),
               child: Text(
                 'Harsh Rathod',
                 style: TextStyle(
@@ -151,7 +151,7 @@ class HomeScreen extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.fromLTRB(45, 210, 0, 0),
               child: Text(
-                '\$ 2,548.00',
+                '\$',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
@@ -162,12 +162,14 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(padding: const EdgeInsets.only(left: 40,top: 290),
+            Padding(padding: const  EdgeInsets.only(left:0 ,top: 5),
               child: Image.asset(
-                  'assets/image/Frame5.png'
+                'assets/image/Frame5.png',
+                width: 110,
+                height: 600,
               ),
             ),
-            const Padding(padding: EdgeInsets.only(left: 70,top: 293),
+            const Padding(padding: EdgeInsets.only(top:295 ,left:70),
               child: Text(
                 'Income',
                 style: TextStyle(
@@ -178,32 +180,33 @@ class HomeScreen extends StatelessWidget {
                   height: 0,
                   letterSpacing: -0.80,
                 ),
-              )
-            ),
-            Padding(padding: const EdgeInsets.only(left: 270,top: 290),
-              child: Image.asset(
-                  'assets/image/Frame7.png'
               ),
             ),
-            const Padding(padding: EdgeInsets.only(left: 300,top: 294),
-                child: Text(
-                  'Expenses',
-                  style: TextStyle(
-                    color: Color(0xFFD0E5E3),
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                    letterSpacing: -0.80,
-                  ),
-                )
+            Padding(padding: const  EdgeInsets.only(top:5 , left:190),
+              child: Image.asset(
+                'assets/image/Frame7.png',
+                width: 110,
+                height: 600,
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(left:260 ,top:297),
+              child: Text(
+                'Expenses',
+                style: TextStyle(
+                  color: Color(0xFFD0E5E3),
+                  fontSize: 16,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                  height: 0,
+                ),
+              ),
             ),
             const Row(
               children: [
                 Padding(
                   padding: EdgeInsets.fromLTRB(47, 320, 0, 0),
                   child: Text(
-                    '\$ 1849.00',
+                    '\$ ',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -215,9 +218,9 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(127, 320, 0, 0),
+                  padding: EdgeInsets.fromLTRB(175, 320, 0, 0),
                   child: Text(
-                    '\$ 284.00',
+                    '\$ ',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -250,7 +253,7 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(150, 390, 0, 0),
                   child: TextButton(
                     onPressed: () {
-                      Get.to(() => const AllTransaction());
+                     Get.to(() => const AllTransaction());
                     },
                     child: const Text(
                       'See all',
@@ -261,7 +264,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             Padding( padding: const EdgeInsets.only(left: 5,top: 450),
-              child: Container(
+              child: SizedBox(
                 height: 400,
                 child: ListView.builder(
                   itemCount: 4,
@@ -278,7 +281,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           Padding(padding: const EdgeInsets.only(left : 140),
-                            child: Text('${paymentHistory[index].amount}',
+                            child: Text(paymentHistory[index].amount,
                               style: const
                               TextStyle(
                                   fontSize: 19,
@@ -292,11 +295,11 @@ class HomeScreen extends StatelessWidget {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${paymentHistory[index].date}'),
+                          Text(paymentHistory[index].date),
                         ],
                       ),
                     );
-                    },
+                  },
                 ),
               ),
             ),
@@ -318,5 +321,5 @@ class PaymentEntry {
     required this.title,
     required this.date,
     required this.amount,
-});
+  });
 }

@@ -19,7 +19,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   int currentTab = 0;
   final List<Widget> screens = [
-    const HomeScreen(),
+    HomeScreen(),
     const Transaction(),
     const Wallet(),
     const Profile(),
@@ -29,10 +29,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[currentTab],
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 10,
-        child: BottomNavigationBar(
+      bottomNavigationBar:BottomNavigationBar(
           currentIndex: currentTab,
           onTap: (int index) {
             setState(() {
@@ -63,15 +60,14 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
           type: BottomNavigationBarType.fixed,
         ),
-      ),
       floatingActionButtonLocation: currentTab == 0
           ? FloatingActionButtonLocation.centerDocked
-          : null, // Show only on the HomeScreen
+          : null,
       floatingActionButton: currentTab == 0
           ? SpeedDial(
         animationAngle: pi,
         animatedIcon: AnimatedIcons.add_event,
-        backgroundColor: Color(0xFF2E7E78),
+        backgroundColor: const Color(0xFF2E7E78),
         animatedIconTheme: const IconThemeData(size: 22.0),
         children: [
           SpeedDialChild(
@@ -113,19 +109,3 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 }
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Your App Title',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CustomBottomNavigationBar(),
-    );
-  }
-}

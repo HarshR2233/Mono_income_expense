@@ -116,7 +116,7 @@ class _TransactionState extends State<Transaction> {
             padding: const EdgeInsets.fromLTRB(215, 140, 0, 0),
             child: ElevatedButton(
               onPressed: () {
-                Get.to(() => Profile()); // Navigate to AddIncome screen using GetX
+                Get.to(() => const Profile()); // Navigate to AddIncome screen using GetX
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF438883)),
@@ -169,7 +169,7 @@ class _TransactionState extends State<Transaction> {
             ),
           ),
           Padding(padding: const EdgeInsets.fromLTRB(285, 200, 0, 0),
-            child:Container(
+            child:SizedBox(
               width: 100,
               child:Obx(
                 () => DropdownButtonFormField<String>(

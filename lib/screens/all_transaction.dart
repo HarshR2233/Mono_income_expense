@@ -93,73 +93,71 @@ class AllTransaction extends StatelessWidget {
       ),
     ];
     return Scaffold(
-      body:Container(
-        child: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(25, 80, 0, 0),
-              child: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.black),
+      body:Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(25, 80, 0, 0),
+            child: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.black),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(150, 95, 0, 0),
+            child: Text(
+              'Transactions',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+                height: 0,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(150, 95, 0, 0),
-              child: Text(
-                'Transactions',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w600,
-                  height: 0,
-                ),
-              ),
-            ),
-            Padding( padding: const EdgeInsets.only(left: 5,top: 150),
-              child: Container(
-                height: 800,
-                child: ListView.builder(
-                  itemCount: paymentHistory.length,
-                  itemBuilder: (context, index){
-                    return ListTile(
-                      leading: Image.asset(paymentHistory[index].image),
-                      title:Row(
-                        children:[
-                          Text(paymentHistory[index].title,
-                            style: const  TextStyle(
-                                fontSize: 20,
+          ),
+          Padding( padding: const EdgeInsets.only(left: 5,top: 150),
+            child: SizedBox(
+              height: 800,
+              child: ListView.builder(
+                itemCount: paymentHistory.length,
+                itemBuilder: (context, index){
+                  return ListTile(
+                    leading: Image.asset(paymentHistory[index].image),
+                    title:Row(
+                      children:[
+                        Text(paymentHistory[index].title,
+                          style: const  TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        Padding(padding: const EdgeInsets.only(left : 140),
+                          child: Text(paymentHistory[index].amount,
+                            style: const
+                            TextStyle(
+                                fontSize: 19,
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.bold
                             ),
                           ),
-                          Padding(padding: const EdgeInsets.only(left : 140),
-                            child: Text('${paymentHistory[index].amount}',
-                              style: const
-                              TextStyle(
-                                  fontSize: 19,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.bold
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('${paymentHistory[index].date}'),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                        ),
+                      ],
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(paymentHistory[index].date),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

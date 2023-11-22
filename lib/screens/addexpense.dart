@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
+void main() async {
   runApp(
     MaterialApp(
       home: AddExpense(),
@@ -17,6 +18,8 @@ class AddExpense extends StatefulWidget {
 class _AddExpenseState extends State<AddExpense> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _amountController = TextEditingController();
+
+  CollectionReference expenseCollection = FirebaseFirestore.instance.collection('expense');
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
   RxString selectedValue = 'Netflix'.obs;
@@ -39,6 +42,22 @@ class _AddExpenseState extends State<AddExpense> {
     );
     if (picked != null) {
       selectedDate(picked);
+    }
+  }
+
+  Future<void> _submitIncome() async {
+    if (_formKey.currentState!.validate()) {
+      await expenseCollection.add({
+        'amount': _amountController.text,
+        'name': selectedValue.value,
+        'date': Timestamp.fromDate(selectedDate.value),
+      });
+      print('Income submitted:');
+      print('Amount: ${_amountController.text}');
+      print('Name: ${selectedValue.value}');
+      print('Date: ${selectedDate.value}');
+      _amountController.clear();
+      selectedValue('Netflix'); // Reset to default value
     }
   }
 
@@ -87,7 +106,7 @@ class _AddExpenseState extends State<AddExpense> {
                   const Padding(
                     padding: EdgeInsets.fromLTRB(80, 80, 0, 0),
                     child: Text(
-                      'Add Expense',
+                      'Add Epense',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -304,11 +323,7 @@ class _AddExpenseState extends State<AddExpense> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(50, 20, 0, 0),
                     child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          print('Amount entered: ${_amountController.text}');
-                        }
-                      },
+                      onPressed: _submitIncome,
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF438883)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
