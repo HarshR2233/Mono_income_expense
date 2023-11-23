@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:income_expense/screens/bottom_navigation_bar.dart';
 
 void main() async {
   runApp(
@@ -58,7 +59,9 @@ class _AddIncomeState extends State<AddIncome> {
       print('Name: ${selectedValue.value}');
       print('Date: ${selectedDate.value}');
       _amountController.clear();
-      selectedValue('Netflix'); // Reset to default value
+      selectedValue('Netflix');
+
+      Get.offAll(() => CustomBottomNavigationBar());
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:income_expense/screens/bottom_navigation_bar.dart';
 
 void main() async {
   runApp(
@@ -45,20 +46,27 @@ class _AddExpenseState extends State<AddExpense> {
     }
   }
 
+  DocumentReference? lastAddedExpense;
+
   Future<void> _submitExpense() async {
     FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
-      await expenseCollection.add({
+      DocumentReference addedExpense = await expenseCollection.add({
         'amount': _amountController.text,
         'name': selectedValue.value,
         'date': Timestamp.fromDate(selectedDate.value),
       });
-      print('Income submitted:');
+
+      lastAddedExpense = addedExpense;
+
+      print('Expense submitted:');
       print('Amount: ${_amountController.text}');
       print('Name: ${selectedValue.value}');
       print('Date: ${selectedDate.value}');
       _amountController.clear();
-      selectedValue('Netflix'); // Reset to default value
+      selectedValue('Netflix'); // Resetting the value after submission
+
+      Get.offAll(() => CustomBottomNavigationBar());
     }
   }
 
@@ -353,3 +361,4 @@ class _AddExpenseState extends State<AddExpense> {
     );
   }
 }
+

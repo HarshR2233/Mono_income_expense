@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:async';
-import 'package:income_expense/screens/homescreen.dart';
 
 class AllTransaction extends StatelessWidget {
-   AllTransaction({super.key});
+  AllTransaction({super.key});
 
   final CollectionReference incomeCollection =
   FirebaseFirestore.instance.collection('incomes');
@@ -16,7 +14,7 @@ class AllTransaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Stack(
+      body: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(25, 80, 0, 0),
@@ -24,7 +22,8 @@ class AllTransaction extends StatelessWidget {
               onPressed: () {
                 Get.back();
               },
-              icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.black),
+              icon: const Icon(
+                  Icons.arrow_back_ios_rounded, color: Colors.black),
             ),
           ),
           const Padding(
@@ -41,17 +40,20 @@ class AllTransaction extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 150, top: 600),
-            child: SizedBox(
+            padding: const EdgeInsets.only(top: 150),
+            child: Center(
               child: FutureBuilder<List<TransactionEntry>>(
                 future: _getTransactionHistory(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
+                    );
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    List<TransactionEntry> transactionHistory = snapshot.data ?? [];
+                    List<TransactionEntry> transactionHistory = snapshot.data ??
+                        [];
 
                     return ListView.builder(
                       itemCount: transactionHistory.length,
@@ -60,31 +62,31 @@ class AllTransaction extends StatelessWidget {
 
                         return ListTile(
                           leading: Image.asset(
-                            entry.type == TransactionType.Income
-                                ? 'assets/image/income_icon.png'
-                                : 'assets/image/expense_icon.png',
+                            entry.name == TransactionType.incomes
+                                ? 'assets/image/Frame5.png'
+                                : 'assets/image/Frame7.png',
                           ),
                           title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligns children to the right
                             children: [
                               Text(
-                                entry.type == TransactionType.Income
+                                entry.name == TransactionType.incomes
                                     ? 'Income'
                                     : 'Expense',
                                 style: const TextStyle(
+                                  color: Colors.black,
                                   fontSize: 20,
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 140),
-                                child: Text(
-                                  '${entry.amount > 0 ? '+' : '-'}\$${entry.amount.abs().toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    fontSize: 19,
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              Text(
+                                '${entry.name == TransactionType.incomes ? '+' : '-'}\$${entry.amount.abs().toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 19,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
@@ -103,7 +105,6 @@ class AllTransaction extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -120,17 +121,21 @@ class AllTransaction extends StatelessWidget {
 
       for (QueryDocumentSnapshot doc in incomeDocs) {
         var amount = doc['amount'];
-        var date = doc['date']; // Replace with the actual field name for the date
+        var date = doc['date'];
+
+        if (date is Timestamp) {
+          date = date.toDate().toString();
+        }
 
         if (amount is num) {
           transactionHistory.add(TransactionEntry(
-            type: TransactionType.Income,
+            name: TransactionType.incomes,
             amount: amount.toDouble(),
             date: date ?? '',
           ));
         } else if (amount is String) {
           transactionHistory.add(TransactionEntry(
-            type: TransactionType.Income,
+            name: TransactionType.incomes,
             amount: double.tryParse(amount) ?? 0.0,
             date: date ?? '',
           ));
@@ -139,45 +144,44 @@ class AllTransaction extends StatelessWidget {
 
       for (QueryDocumentSnapshot doc in expenseDocs) {
         var amount = doc['amount'];
-        var date = doc['date']; // Replace with the actual field name for the date
+        var date = doc['date'];
+
+        if (date is Timestamp) {
+          date = date.toDate().toString();
+        }
 
         if (amount is num) {
           transactionHistory.add(TransactionEntry(
-            type: TransactionType.Expense,
+            name: TransactionType.expense,
             amount: amount.toDouble(),
             date: date ?? '',
           ));
         } else if (amount is String) {
           transactionHistory.add(TransactionEntry(
-            type: TransactionType.Expense,
+            name: TransactionType.expense,
             amount: double.tryParse(amount) ?? 0.0,
             date: date ?? '',
           ));
         }
       }
+      transactionHistory.sort((a, b) => b.date.compareTo(a.date));
     } catch (e) {
       print('Error fetching transaction history: $e');
     }
 
-    // Sort the transaction history by date
-    transactionHistory.sort((a, b) => b.date.compareTo(a.date));
-
     return transactionHistory;
   }
-
 }
-
-enum TransactionType { Income, Expense }
+enum TransactionType { incomes, expense }
 
 class TransactionEntry {
-  final TransactionType type;
+  final TransactionType name;
   final double amount;
   final String date;
 
   TransactionEntry({
-    required this.type,
+    required this.name,
     required this.amount,
     required this.date,
   });
 }
-

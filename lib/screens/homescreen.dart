@@ -6,13 +6,22 @@ import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
 
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  Future<void> _clearCollection(CollectionReference collection) async {
+    QuerySnapshot snapshot = await collection.get();
+    List<QueryDocumentSnapshot> docs = snapshot.docs;
+
+    for (QueryDocumentSnapshot doc in docs) {
+      await doc.reference.delete();
+    }
+  }
 
   final CollectionReference incomeCollection =
   FirebaseFirestore.instance.collection('incomes');
@@ -116,20 +125,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 0, top: 5),
-              child: Image.asset(
-                'assets/image/Frame5.png',
-                width: 110,
-                height: 600,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(47, 320, 0, 0),
+              padding: const EdgeInsets.fromLTRB(47, 315, 0, 0),
               child: FutureBuilder<double>(
                 future: _getTotalIncome(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
+                    );
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
@@ -151,13 +154,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(238, 320, 0, 0),
+              padding: const EdgeInsets.fromLTRB(220, 315, 0, 0),
               child: FutureBuilder<double>(
                 future: _getTotalExpense(),
                 builder: (context, expenseSnapshot) {
                   if (expenseSnapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
+                    );
                   } else if (expenseSnapshot.hasError) {
                     return Text('Error: ${expenseSnapshot.error}');
                   } else {
@@ -185,7 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: _getProgrammaticTotalBalance(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
+                    );
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
@@ -205,8 +212,88 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+            Padding(padding: EdgeInsets.only(top: 250,left: 150),
+              child:FutureBuilder<List<TransactionEntry>>(
+              future: _getTransactionHistory(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
+                  );
+                } else if (snapshot.hasError) {
+                  print('Error: ${snapshot.error}');
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  List<TransactionEntry> transactionHistory = snapshot.data ?? [];
+
+                  if (transactionHistory.isEmpty) {
+                    // Add print statement to check if the list is empty
+                    print('Transaction history is empty');
+                    return Text('Transaction history is empty');
+                  }
+
+                  // Sort the transactionHistory in descending order based on date
+                  transactionHistory.sort((a, b) => b.date.compareTo(a.date));
+
+                  return ListView.builder(
+                    itemCount: transactionHistory.length,
+                    itemBuilder: (context, index) {
+                      var entry = transactionHistory[index];
+
+                      return ListTile(
+                        leading: Image.asset(
+                          entry.name == TransactionType.incomes
+                              ? 'assets/image/Frame5.png'
+                              : 'assets/image/Frame7.png',
+                        ),
+                        title: Row(
+                          children: [
+                            Text(
+                              entry.name == TransactionType.incomes
+                                  ? 'Income'
+                                  : 'Expense',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 140),
+                              child: Text(
+                                '${entry.amount > 0 ? '+' : '-'}\$${entry.amount.abs().toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 19,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(entry.date),
+                          ],
+                        ),
+                      );
+                      },
+                  );
+                }
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 0, top: 0),
+              child: Image.asset(
+                'assets/image/Frame5.png',
+                width: 110,
+                height: 600,
+              ),
+            ),
             const Padding(
-              padding: EdgeInsets.only(top: 295, left: 70),
+              padding: EdgeInsets.only(top: 290, left: 75),
               child: Text(
                 'Income',
                 style: TextStyle(
@@ -220,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 5, left: 190),
+              padding: const EdgeInsets.only(top: 0, left: 173),
               child: Image.asset(
                 'assets/image/Frame7.png',
                 width: 110,
@@ -228,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.only(left: 260, top: 297),
+              padding: EdgeInsets.only(left: 250, top: 290),
               child: Text(
                 'Expenses',
                 style: TextStyle(
@@ -270,68 +357,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 190, top: 600),
-              child: SizedBox(
-                child: FutureBuilder<List<TransactionEntry>>(
-                  future: _getTransactionHistory(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      List<TransactionEntry> transactionHistory = snapshot.data ?? [];
-
-                      return ListView.builder(
-                        itemCount: transactionHistory.length,
-                        itemBuilder: (context, index) {
-                          var entry = transactionHistory[index];
-
-                          return ListTile(
-                            leading: Image.asset(
-                              entry.type == TransactionType.Income
-                                  ? 'assets/image/Frame5.png'
-                                  : 'assets/image/Frame7.png',
-                            ),
-                            title: Row(
-                              children: [
-                                Text(
-                                  entry.type == TransactionType.Income
-                                      ? 'Income'
-                                      : 'Expense',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 140),
-                                  child: Text(
-                                    '${entry.amount > 0 ? '+' : '-'}\$${entry.amount.abs().toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      fontSize: 19,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(entry.date),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  },
+            Padding(padding: const EdgeInsets.only(top: 180, left: 270),
+              child: ElevatedButton(
+                onPressed: () {
+                  _clearData();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF438883),
                 ),
-              ),
+                child: const Text('Clear Data',
+                  style:TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    height: 0,
+                  ),
+                ),
+              )
             ),
           ],
         ),
@@ -352,7 +395,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<double> _getTotalIncome() async {
-    // Query Firestore collection 'income' and calculate total income
     try {
       QuerySnapshot incomeSnapshot = await incomeCollection.get();
       List<QueryDocumentSnapshot> incomeDocs = incomeSnapshot.docs;
@@ -377,7 +419,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<double> _getTotalExpense() async {
-    // Query Firestore collection 'expense' and calculate total expense
     try {
       QuerySnapshot expenseSnapshot = await expenseCollection.get();
       List<QueryDocumentSnapshot> expenseDocs = expenseSnapshot.docs;
@@ -400,6 +441,93 @@ class _HomeScreenState extends State<HomeScreen> {
       return 0.0;
     }
   }
+
+  Future<void> _clearData() async {
+    List<Map<String, dynamic>> backupData = [];
+
+    try {
+      backupData = await _backupData();
+
+      await _clearCollection(incomeCollection);
+
+      await _clearCollection(expenseCollection);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Data Cleared Successfully',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontFamily: 'inter',
+              fontWeight: FontWeight.w600,
+              height: 0,
+            ),
+          ),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          backgroundColor: Color(0xFF438883),
+          // action: SnackBarAction(
+          //   label: 'Undo',
+          //   onPressed: () async {
+          //     await _restoreData(backupData);
+          //     setState(() {});
+          //     ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          //   },
+          // ),
+        ),
+      );
+      setState(() {});
+    } catch (e) {
+      print('Error clearing data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error clearing data',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+              height: 0,
+            ),
+          ),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> _backupData() async {
+    List<Map<String, dynamic>> backupData = [];
+
+    try {
+      QuerySnapshot incomeSnapshot = await incomeCollection.get();
+      QuerySnapshot expenseSnapshot = await expenseCollection.get();
+
+      List<QueryDocumentSnapshot> incomeDocs = incomeSnapshot.docs;
+      List<QueryDocumentSnapshot> expenseDocs = expenseSnapshot.docs;
+
+      for (QueryDocumentSnapshot doc in incomeDocs) {
+        backupData.add(doc.data() as Map<String, dynamic>);
+      }
+
+      for (QueryDocumentSnapshot doc in expenseDocs) {
+        backupData.add(doc.data() as Map<String, dynamic>);
+      }
+    } catch (e) {
+      print('Error backing up data: $e');
+    }
+
+    return backupData;
+  }
+
   Future<List<TransactionEntry>> _getTransactionHistory() async {
     List<TransactionEntry> transactionHistory = [];
 
@@ -413,17 +541,20 @@ class _HomeScreenState extends State<HomeScreen> {
       for (QueryDocumentSnapshot doc in incomeDocs) {
         var amount = doc['amount'];
         var date = doc['date'];
-        //var name = doc['name'];// Replace with the actual field name for the date
+
+        if (date is Timestamp) {
+          date = date.toDate().toString();
+        }
 
         if (amount is num) {
           transactionHistory.add(TransactionEntry(
-            type: TransactionType.Income,
+            name: TransactionType.incomes,
             amount: amount.toDouble(),
             date: date ?? '',
           ));
         } else if (amount is String) {
           transactionHistory.add(TransactionEntry(
-            type: TransactionType.Income,
+            name: TransactionType.incomes,
             amount: double.tryParse(amount) ?? 0.0,
             date: date ?? '',
           ));
@@ -433,44 +564,82 @@ class _HomeScreenState extends State<HomeScreen> {
       for (QueryDocumentSnapshot doc in expenseDocs) {
         var amount = doc['amount'];
         var date = doc['date'];
-        //var name = doc['name'];
-        // Replace with the actual field name for the date
+
+        if (date is Timestamp) {
+          date = date.toDate().toString();
+        }
 
         if (amount is num) {
           transactionHistory.add(TransactionEntry(
-            type: TransactionType.Expense,
+            name: TransactionType.expense,
             amount: amount.toDouble(),
             date: date ?? '',
           ));
         } else if (amount is String) {
           transactionHistory.add(TransactionEntry(
-            type: TransactionType.Expense,
+            name: TransactionType.expense,
             amount: double.tryParse(amount) ?? 0.0,
             date: date ?? '',
           ));
         }
       }
+      transactionHistory.sort((a, b) => b.date.compareTo(a.date));
     } catch (e) {
       print('Error fetching transaction history: $e');
     }
 
-    // Sort the transaction history by date
-    transactionHistory.sort((a, b) => b.date.compareTo(a.date));
-
     return transactionHistory;
   }
 
+  // Future<void> _restoreData(List<Map<String, dynamic>> backupData) async {
+  //   try {
+  //     for (var data in backupData) {
+  //       print('Restoring data: $data');
+  //
+  //       // Adjust the amount based on the type
+  //       var amount = data['amount'] is num
+  //           ? data['amount'].toDouble()
+  //           : double.tryParse(data['amount']) ?? 0.0;
+  //
+  //       // Update the 'type' field based on the type
+  //       TransactionType type = data['type'] == 'Income'
+  //           ? TransactionType.Income
+  //           : TransactionType.Expense;
+  //
+  //       // Create a map with common fields
+  //       var restoredData = {
+  //         'amount': amount,
+  //         'date': data['date'],
+  //       };
+  //
+  //       // Add 'name' field if the type is 'Income'
+  //       if (type == TransactionType.Income) {
+  //         restoredData['name'] = data['name'];
+  //       }
+  //
+  //       // Restore the data with adjusted amount and type
+  //       await FirebaseFirestore.instance
+  //           .collection(type == TransactionType.Income ? 'incomes' : 'expense')
+  //           .add(restoredData);
+  //
+  //       // Add print statement to check where the data is restored
+  //       print('Restored to ${type == TransactionType.Income ? 'Income' : 'Expense'} collection');
+  //     }
+  //   } catch (e) {
+  //     print('Error restoring data: $e');
+  //   }
+  // }
 }
 
-enum TransactionType { Income, Expense }
+enum TransactionType { incomes, expense }
 
 class TransactionEntry {
-  final TransactionType type;
+  final TransactionType name;
   final double amount;
   final String date;
 
   TransactionEntry({
-    required this.type,
+    required this.name,
     required this.amount,
     required this.date,
   });
