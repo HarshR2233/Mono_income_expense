@@ -3,6 +3,7 @@ import 'package:income_expense/screens/all_transaction.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -22,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
       await doc.reference.delete();
     }
   }
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   final CollectionReference incomeCollection =
   FirebaseFirestore.instance.collection('incomes');
@@ -212,78 +215,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            Padding(padding: EdgeInsets.only(top: 250,left: 150),
-              child:FutureBuilder<List<TransactionEntry>>(
-              future: _getTransactionHistory(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
-                  );
-                } else if (snapshot.hasError) {
-                  print('Error: ${snapshot.error}');
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  List<TransactionEntry> transactionHistory = snapshot.data ?? [];
-
-                  if (transactionHistory.isEmpty) {
-                    // Add print statement to check if the list is empty
-                    print('Transaction history is empty');
-                    return Text('Transaction history is empty');
-                  }
-
-                  // Sort the transactionHistory in descending order based on date
-                  transactionHistory.sort((a, b) => b.date.compareTo(a.date));
-
-                  return ListView.builder(
-                    itemCount: transactionHistory.length,
-                    itemBuilder: (context, index) {
-                      var entry = transactionHistory[index];
-
-                      return ListTile(
-                        leading: Image.asset(
-                          entry.name == TransactionType.incomes
-                              ? 'assets/image/Frame5.png'
-                              : 'assets/image/Frame7.png',
-                        ),
-                        title: Row(
-                          children: [
-                            Text(
-                              entry.name == TransactionType.incomes
-                                  ? 'Income'
-                                  : 'Expense',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 140),
-                              child: Text(
-                                '${entry.amount > 0 ? '+' : '-'}\$${entry.amount.abs().toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  fontSize: 19,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(entry.date),
-                          ],
-                        ),
-                      );
-                      },
-                  );
-                }
-                },
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.only(left: 0, top: 0),
               child: Image.asset(
@@ -454,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Data Cleared Successfully',
+          content: const Text('Data Cleared Successfully',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -464,11 +395,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          backgroundColor: Color(0xFF438883),
+          backgroundColor: const Color(0xFF438883),
           // action: SnackBarAction(
           //   label: 'Undo',
           //   onPressed: () async {
@@ -484,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print('Error clearing data: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error clearing data',
+          content: const Text('Error clearing data',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -494,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -527,70 +458,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return backupData;
   }
-
-  Future<List<TransactionEntry>> _getTransactionHistory() async {
-    List<TransactionEntry> transactionHistory = [];
-
-    try {
-      QuerySnapshot incomeSnapshot = await incomeCollection.get();
-      QuerySnapshot expenseSnapshot = await expenseCollection.get();
-
-      List<QueryDocumentSnapshot> incomeDocs = incomeSnapshot.docs;
-      List<QueryDocumentSnapshot> expenseDocs = expenseSnapshot.docs;
-
-      for (QueryDocumentSnapshot doc in incomeDocs) {
-        var amount = doc['amount'];
-        var date = doc['date'];
-
-        if (date is Timestamp) {
-          date = date.toDate().toString();
-        }
-
-        if (amount is num) {
-          transactionHistory.add(TransactionEntry(
-            name: TransactionType.incomes,
-            amount: amount.toDouble(),
-            date: date ?? '',
-          ));
-        } else if (amount is String) {
-          transactionHistory.add(TransactionEntry(
-            name: TransactionType.incomes,
-            amount: double.tryParse(amount) ?? 0.0,
-            date: date ?? '',
-          ));
-        }
-      }
-
-      for (QueryDocumentSnapshot doc in expenseDocs) {
-        var amount = doc['amount'];
-        var date = doc['date'];
-
-        if (date is Timestamp) {
-          date = date.toDate().toString();
-        }
-
-        if (amount is num) {
-          transactionHistory.add(TransactionEntry(
-            name: TransactionType.expense,
-            amount: amount.toDouble(),
-            date: date ?? '',
-          ));
-        } else if (amount is String) {
-          transactionHistory.add(TransactionEntry(
-            name: TransactionType.expense,
-            amount: double.tryParse(amount) ?? 0.0,
-            date: date ?? '',
-          ));
-        }
-      }
-      transactionHistory.sort((a, b) => b.date.compareTo(a.date));
-    } catch (e) {
-      print('Error fetching transaction history: $e');
-    }
-
-    return transactionHistory;
-  }
-
   // Future<void> _restoreData(List<Map<String, dynamic>> backupData) async {
   //   try {
   //     for (var data in backupData) {
