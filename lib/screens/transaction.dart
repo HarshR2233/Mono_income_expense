@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:income_expense/model/chart_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 
 class Transaction extends StatefulWidget {
@@ -18,18 +20,40 @@ class _TransactionState extends State<Transaction> {
   @override
   void initState(){
     super.initState();
-    data = [
-      CharData(17,20500),
-      CharData(18,20684),
-      CharData(19,20643),
-      CharData(20,20997),
-      CharData(21,20883),
-      CharData(22,20635),
-      CharData(23,20800),
-      CharData(24,20500),
-      CharData(25,20354),
-      CharData(26,20354),
-    ];
+    data = [];
+    fetchDataFromFirestore();
+  }
+
+  Future<void> fetchDataFromFirestore() async {
+    // Fetch data from 'incomes' collection
+    QuerySnapshot incomeSnapshot =
+    await FirebaseFirestore.instance.collection('incomes').get();
+
+    List<CharData> incomeData = incomeSnapshot.docs.map((doc) {
+      String name = doc['name']; // Adjust 'name' to your actual field name
+      String amount = doc['amount']; // Adjust 'amount' to your actual field name
+      Timestamp dateTimestamp = doc['date']; // Adjust 'date' to your actual field name
+      DateTime date = dateTimestamp.toDate();
+
+      return CharData(date.day, double.parse(amount));
+    }).toList();
+
+    // Fetch data from 'expense' collection
+    QuerySnapshot expenseSnapshot =
+    await FirebaseFirestore.instance.collection('expense').get();
+
+    List<CharData> expenseData = expenseSnapshot.docs.map((doc) {
+      String name = doc['name']; // Adjust 'name' to your actual field name
+      String amount = doc['amount']; // Adjust 'amount' to your actual field name
+      Timestamp dateTimestamp = doc['date']; // Adjust 'date' to your actual field name
+      DateTime date = dateTimestamp.toDate();
+
+      return CharData(date.day, double.parse(amount));
+    }).toList();
+
+    data = [...incomeData, ...expenseData];
+
+    setState(() {});
   }
 
   final TextEditingController dateController = TextEditingController();
@@ -68,18 +92,18 @@ class _TransactionState extends State<Transaction> {
                 borderColor: Colors.transparent,
                 plotAreaBorderWidth: 0,
                 primaryXAxis: NumericAxis(
-                  minimum: 17,
-                  maximum: 26,
-                  isVisible: false,
+                  minimum: 1,
+                  maximum: 20,
+                  isVisible: true,
                   interval: 1,
                   borderWidth: 0,
                   borderColor: Colors.transparent,
                 ),
                 primaryYAxis: NumericAxis(
-                  minimum: 19000,
-                  maximum: 26000,
-                  interval: 1000,
-                  isVisible: false,
+                  minimum: 10,
+                  maximum: 30000,
+                  isVisible: true,
+                  interval: 1,
                   borderWidth: 0,
                   borderColor: Colors.transparent,
                 ),
