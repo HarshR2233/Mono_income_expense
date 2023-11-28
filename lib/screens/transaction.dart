@@ -20,8 +20,25 @@ class _TransactionState extends State<Transaction> {
   late List<CharData> incomeData;
   late List<CharData> expenseData;
 
+  double findMinXValue(List<CharData> data) {
+    return data.map((datum) => datum.day).reduce((value, element) => value < element ? value : element).toDouble();
+  }
+
+  double findMaxXValue(List<CharData> data) {
+    return data.map((datum) => datum.day).reduce((value, element) => value > element ? value : element).toDouble();
+  }
+
+  double findMinYValue(List<CharData> data) {
+    return data.map((datum) => datum.price).reduce((value, element) => value < element ? value : element);
+  }
+
+  double findMaxYValue(List<CharData> data) {
+    return data.map((datum) => datum.price).reduce((value, element) => value > element ? value : element);
+  }
+
   late List<CharData> selectedData;
   late String selectedDropdownValue;
+  late String selectedFilter;
 
   DateTime startDate = DateTime(2023, 1, 1);
   DateTime endDate = DateTime(2023, 12, 31);
@@ -33,15 +50,16 @@ class _TransactionState extends State<Transaction> {
     expenseData = [];
     selectedData = [];
     selectedDropdownValue = 'Income';
+    selectedFilter = 'Days'; // Default filter
     fetchDataFromFirestore(startDate, endDate);
   }
 
   Future<void> fetchDataFromFirestore(DateTime startDate, DateTime endDate) async {
-    // Fetch income data from 'incomes' collection within the date range
     QuerySnapshot incomeSnapshot = await FirebaseFirestore.instance
         .collection('incomes')
         .where('date', isGreaterThanOrEqualTo: startDate)
         .where('date', isLessThanOrEqualTo: endDate)
+        .orderBy('date') // Sort by date
         .get();
 
     incomeData = incomeSnapshot.docs.map((doc) {
@@ -53,11 +71,11 @@ class _TransactionState extends State<Transaction> {
       return CharData(date.day, double.parse(amount));
     }).toList();
 
-    // Fetch expense data from 'expense' collection within the date range
     QuerySnapshot expenseSnapshot = await FirebaseFirestore.instance
         .collection('expense')
         .where('date', isGreaterThanOrEqualTo: startDate)
         .where('date', isLessThanOrEqualTo: endDate)
+        .orderBy('date') // Sort by date
         .get();
 
     expenseData = expenseSnapshot.docs.map((doc) {
@@ -69,9 +87,48 @@ class _TransactionState extends State<Transaction> {
       return CharData(date.day, double.parse(amount));
     }).toList();
 
-    selectedData = incomeData; // Initialize with income data
+    selectedData = (selectedDropdownValue == 'Income') ? incomeData : expenseData;
+    applyFilter();
 
     setState(() {});
+  }
+
+  void applyFilter() {
+    if (selectedFilter == 'Days') {
+      selectedData = (selectedDropdownValue == 'Income') ? incomeData : expenseData;
+    } else if (selectedFilter == 'Weekly') {
+      selectedData = aggregateDataBy(selectedData, (data) => data.day ~/ 7, (groupedData) {
+        int weekDay = groupedData[0].day;
+        double totalAmount = groupedData.map((data) => data.price).reduce((a, b) => a + b);
+        return CharData(weekDay, totalAmount);
+      });
+    } else if (selectedFilter == 'Monthly') {
+      selectedData = aggregateDataBy(selectedData, (data) => data.day ~/ 30, (groupedData) {
+        int monthDay = groupedData[0].day;
+        double totalAmount = groupedData.map((data) => data.price).reduce((a, b) => a + b);
+        return CharData(monthDay, totalAmount);
+      });
+    } else if (selectedFilter == 'Yearly') {
+      selectedData = aggregateDataBy(selectedData, (data) => data.day ~/ 365, (groupedData) {
+        int yearDay = groupedData[0].day;
+        double totalAmount = groupedData.map((data) => data.price).reduce((a, b) => a + b);
+        return CharData(yearDay, totalAmount);
+      });
+    }
+  }
+
+  List<CharData> aggregateDataBy(List<CharData> data, int Function(CharData) groupKey, CharData Function(List<CharData>) aggregator) {
+    Map<int, List<CharData>> groupedData = {};
+
+    for (var datum in data) {
+      int key = groupKey(datum);
+      if (!groupedData.containsKey(key)) {
+        groupedData[key] = [];
+      }
+      groupedData[key]!.add(datum);
+    }
+
+    return groupedData.values.map(aggregator).toList();
   }
 
   Future<void> _showFilterDialog() async {
@@ -123,72 +180,127 @@ class _TransactionState extends State<Transaction> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: _showFilterDialog,
-            icon: const Icon(Icons.filter_list),
-          ),
-        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: screenWidth * 0.3, top: screenHeight * 0.0001, right: screenHeight * 0.13),
-              child: DropdownButtonFormField<String>(
-                value: selectedDropdownValue,
-                items: dropdownItems.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Align children to the right
+              children: [
+                // Other widgets...
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    width: screenWidth * 0.3, // Adjust the width as needed
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                    ),
+                    child: DropdownButton<String>(
+                      value: selectedDropdownValue,
+                      items: dropdownItems.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.04,
+                              color: Colors.black,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedDropdownValue = newValue!;
+                          selectedData = (selectedDropdownValue == 'Income') ? incomeData : expenseData;
+                          applyFilter();
+                        });
+                      },
                       style: TextStyle(
-                        fontSize: screenWidth * 0.04,
+                        fontSize: screenWidth * 0.020,
                         color: Colors.black,
                       ),
+                      icon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.black,
+                        size: 24,
+                      ),
+                      elevation: 16,
                     ),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedDropdownValue = newValue!;
-                    selectedData = (selectedDropdownValue == 'Income') ? incomeData : expenseData;
-                  });
-                },
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.02),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color(0xFF438883),
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(screenWidth * 0.02),
                   ),
                 ),
-                style: TextStyle(
-                  fontSize: screenWidth * 0.025,
-                  color: Colors.black,
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedFilter = 'Days';
+                      applyFilter();
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: selectedFilter == 'Days' ? const Color(0xFF438883) : Colors.transparent,
+                    onPrimary: Colors.white,
+                  ),
+                  child: const Text('Days'),
                 ),
-                icon: const Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.black,
-                  size: 24,
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedFilter = 'Weekly';
+                      applyFilter();
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: selectedFilter == 'Weekly' ? const Color(0xFF438883) : Colors.transparent,
+                    onPrimary: Colors.white,
+                  ),
+                  child: const Text('Weekly'),
                 ),
-                elevation: 16,
-              ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedFilter = 'Monthly';
+                      applyFilter();
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: selectedFilter == 'Monthly' ? const Color(0xFF438883) : Colors.transparent,
+                    onPrimary: Colors.white,
+                  ),
+                  child: const Text('Monthly'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedFilter = 'Yearly';
+                      applyFilter();
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: selectedFilter == 'Yearly' ? const Color(0xFF438883) : Colors.transparent,
+                    onPrimary: Colors.white,
+                  ),
+                  child: const Text('Yearly'),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             Container(
-              height: screenHeight * 0.5,
+              height: screenHeight * 0.2,
               width: screenWidth * 0.9,
               child: SfCartesianChart(
                 margin: const EdgeInsets.all(0),
@@ -196,17 +308,18 @@ class _TransactionState extends State<Transaction> {
                 borderColor: Colors.transparent,
                 plotAreaBorderWidth: 0,
                 primaryXAxis: NumericAxis(
-                  minimum: 1,
-                  maximum: 31,
-                  isVisible: true,
+                  minimum: findMinXValue(selectedData),
+                  maximum: findMaxXValue(selectedData),
+                  isVisible: false,
                   interval: 1,
                   borderWidth: 0,
                   borderColor: Colors.transparent,
                 ),
+
                 primaryYAxis: NumericAxis(
-                  minimum: 100,
-                  maximum: 40000,
-                  isVisible: true,
+                  minimum: findMinYValue(selectedData),
+                  maximum: findMaxYValue(selectedData),
+                  isVisible: false,
                   borderWidth: 0,
                   borderColor: Colors.transparent,
                 ),
