@@ -21,7 +21,7 @@ void main() async {
       initialRoute: '/splash',
       getPages: [
         GetPage(name: '/splash', page: () => splash()),
-        GetPage(name: '/onboarding', page: () => onboarding()),
+        GetPage(name: '/onboarding', page: () => Onboarding()),
       ],
     ),
   );

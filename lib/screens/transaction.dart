@@ -1,91 +1,195 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:income_expense/model/chart_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+class CharData {
+  final int day;
+  final double price;
 
+  CharData(this.day, this.price);
+}
 
 class Transaction extends StatefulWidget {
-  const Transaction({super.key});
+  const Transaction({Key? key}) : super(key: key);
 
   @override
   State<Transaction> createState() => _TransactionState();
 }
 
 class _TransactionState extends State<Transaction> {
+  late List<CharData> incomeData;
+  late List<CharData> expenseData;
 
-  late List<CharData> data;
+  late List<CharData> selectedData;
+  late String selectedDropdownValue;
+
+  DateTime startDate = DateTime(2023, 1, 1);
+  DateTime endDate = DateTime(2023, 12, 31);
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    data = [];
-    fetchDataFromFirestore();
+    incomeData = [];
+    expenseData = [];
+    selectedData = [];
+    selectedDropdownValue = 'Income';
+    fetchDataFromFirestore(startDate, endDate);
   }
 
-  Future<void> fetchDataFromFirestore() async {
-    // Fetch data from 'incomes' collection
-    QuerySnapshot incomeSnapshot =
-    await FirebaseFirestore.instance.collection('incomes').get();
+  Future<void> fetchDataFromFirestore(DateTime startDate, DateTime endDate) async {
+    // Fetch income data from 'incomes' collection within the date range
+    QuerySnapshot incomeSnapshot = await FirebaseFirestore.instance
+        .collection('incomes')
+        .where('date', isGreaterThanOrEqualTo: startDate)
+        .where('date', isLessThanOrEqualTo: endDate)
+        .get();
 
-    List<CharData> incomeData = incomeSnapshot.docs.map((doc) {
-      String name = doc['name']; // Adjust 'name' to your actual field name
-      String amount = doc['amount']; // Adjust 'amount' to your actual field name
-      Timestamp dateTimestamp = doc['date']; // Adjust 'date' to your actual field name
+    incomeData = incomeSnapshot.docs.map((doc) {
+      String name = doc['name'];
+      String amount = doc['amount'];
+      Timestamp dateTimestamp = doc['date'];
       DateTime date = dateTimestamp.toDate();
 
       return CharData(date.day, double.parse(amount));
     }).toList();
 
-    // Fetch data from 'expense' collection
-    QuerySnapshot expenseSnapshot =
-    await FirebaseFirestore.instance.collection('expense').get();
+    // Fetch expense data from 'expense' collection within the date range
+    QuerySnapshot expenseSnapshot = await FirebaseFirestore.instance
+        .collection('expense')
+        .where('date', isGreaterThanOrEqualTo: startDate)
+        .where('date', isLessThanOrEqualTo: endDate)
+        .get();
 
-    List<CharData> expenseData = expenseSnapshot.docs.map((doc) {
-      String name = doc['name']; // Adjust 'name' to your actual field name
-      String amount = doc['amount']; // Adjust 'amount' to your actual field name
-      Timestamp dateTimestamp = doc['date']; // Adjust 'date' to your actual field name
+    expenseData = expenseSnapshot.docs.map((doc) {
+      String name = doc['name'];
+      String amount = doc['amount'];
+      Timestamp dateTimestamp = doc['date'];
       DateTime date = dateTimestamp.toDate();
 
       return CharData(date.day, double.parse(amount));
     }).toList();
 
-    data = [...incomeData, ...expenseData];
+    selectedData = incomeData; // Initialize with income data
 
     setState(() {});
   }
 
-  final TextEditingController dateController = TextEditingController();
+  Future<void> _showFilterDialog() async {
+    DateTime? newStartDate = await showDatePicker(
+      context: context,
+      initialDate: startDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2030),
+    );
 
-  final RxString selectedValue = 'Expense'.obs;
+    if (newStartDate != null) {
+      DateTime? newEndDate = await showDatePicker(
+        context: context,
+        initialDate: endDate,
+        firstDate: newStartDate,
+        lastDate: DateTime(2030),
+      );
 
-  List<String> dropdownItems = [
-    'Expense',
+      if (newEndDate != null) {
+        setState(() {
+          startDate = newStartDate;
+          endDate = newEndDate;
+        });
+        fetchDataFromFirestore(startDate, endDate);
+      }
+    }
+  }
+
+  final List<String> dropdownItems = [
     'Income',
+    'Expense',
   ];
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:const Color(0xFF438883) ,
-        title: const Text('Statistics',
+        backgroundColor: const Color(0xFF438883),
+        title: Text(
+          'Statistics',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: screenWidth * 0.04,
             fontFamily: 'Inter',
             fontWeight: FontWeight.w600,
-            height: 0,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: _showFilterDialog,
+            icon: const Icon(Icons.filter_list),
+          ),
+        ],
       ),
-        body: Column(
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
+            Padding(
+              padding: EdgeInsets.only(left: screenWidth * 0.3, top: screenHeight * 0.0001, right: screenHeight * 0.13),
+              child: DropdownButtonFormField<String>(
+                value: selectedDropdownValue,
+                items: dropdownItems.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04,
+                        color: Colors.black,
+                      ),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedDropdownValue = newValue!;
+                    selectedData = (selectedDropdownValue == 'Income') ? incomeData : expenseData;
+                  });
+                },
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.02),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xFF438883),
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                  ),
+                ),
+                style: TextStyle(
+                  fontSize: screenWidth * 0.025,
+                  color: Colors.black,
+                ),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.black,
+                  size: 24,
+                ),
+                elevation: 16,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: screenHeight * 0.5,
+              width: screenWidth * 0.9,
               child: SfCartesianChart(
                 margin: const EdgeInsets.all(0),
                 borderWidth: 0,
@@ -93,30 +197,29 @@ class _TransactionState extends State<Transaction> {
                 plotAreaBorderWidth: 0,
                 primaryXAxis: NumericAxis(
                   minimum: 1,
-                  maximum: 20,
+                  maximum: 31,
                   isVisible: true,
                   interval: 1,
                   borderWidth: 0,
                   borderColor: Colors.transparent,
                 ),
                 primaryYAxis: NumericAxis(
-                  minimum: 10,
-                  maximum: 30000,
+                  minimum: 100,
+                  maximum: 40000,
                   isVisible: true,
-                  interval: 1,
                   borderWidth: 0,
                   borderColor: Colors.transparent,
                 ),
                 series: <ChartSeries<CharData, int>>[
                   SplineAreaSeries(
-                    dataSource: data,
-                    xValueMapper:(CharData data, _)=> data.day,
-                    yValueMapper:(CharData data, _)=>data.price,
+                    dataSource: selectedData,
+                    xValueMapper: (CharData data, _) => data.day,
+                    yValueMapper: (CharData data, _) => data.price,
                     splineType: SplineType.natural,
-                    gradient:LinearGradient(
+                    gradient: LinearGradient(
                       colors: [
                         const Color(0xFF438883),
-                        Colors.green.shade50,
+                        (selectedDropdownValue == 'Income') ? Colors.green.shade50 : Colors.red.shade50,
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -131,15 +234,16 @@ class _TransactionState extends State<Transaction> {
                       isVisible: true,
                       borderColor: Color(0xFF438883),
                     ),
-                    dataSource: data,
+                    dataSource: selectedData,
                     xValueMapper: (CharData data, _) => data.day,
                     yValueMapper: (CharData data, _) => data.price,
                   ),
                 ],
               ),
-            )
+            ),
           ],
-        )
+        ),
+      ),
     );
   }
 }

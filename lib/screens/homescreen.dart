@@ -4,9 +4,7 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
-
 class HomeScreen extends StatefulWidget {
-
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -14,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   Future<void> _clearCollection(CollectionReference collection) async {
     QuerySnapshot snapshot = await collection.get();
     List<QueryDocumentSnapshot> docs = snapshot.docs;
@@ -24,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  GlobalKey<RefreshIndicatorState>();
 
   final CollectionReference incomeCollection =
   FirebaseFirestore.instance.collection('incomes');
@@ -37,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -62,12 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Positioned(
               top: 95,
-              left: 350,
+              left: 290,
               child: Image.asset('assets/image/bell1.png'),
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20, top: 33),
-              child: Text(
+            Padding(
+              padding: EdgeInsets.only(left: screenWidth * 0.05, top: 33),
+              child: const Text(
                 'Good Morning,',
                 style: TextStyle(
                   color: Colors.white,
@@ -78,9 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20, top: 35),
-              child: Text(
+            Padding(
+              padding: EdgeInsets.only(left: screenWidth * 0.05, top: 35),
+              child: const Text(
                 'Harsh Rathod',
                 style: TextStyle(
                   color: Colors.white,
@@ -92,9 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 160, 0, 0),
+              padding: EdgeInsets.fromLTRB(screenWidth * 0.05, 160, screenWidth * 0.05, 0),
               child: Container(
-                width: 374,
+                width: screenWidth - screenWidth * 0.1,
                 height: 201,
                 decoration: ShapeDecoration(
                   color: const Color(0xFF2E7E78),
@@ -104,9 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(45, 186, 0, 0),
-              child: Text(
+            Padding(
+              padding: EdgeInsets.fromLTRB(screenWidth * 0.1, 186, screenWidth * 0.05, 0),
+              child: const Text(
                 'Total Balance',
                 style: TextStyle(
                   color: Colors.white,
@@ -122,13 +121,13 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Image.asset(
                   'assets/image/chevron.png',
-                  width: 300,
+                  width: screenWidth - screenWidth * 0.1,
                   height: 393,
                 ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(47, 315, 0, 0),
+              padding: EdgeInsets.fromLTRB(screenWidth * 0.10, 315, screenWidth * 0.10, 10),
               child: FutureBuilder<double>(
                 future: _getTotalIncome(),
                 builder: (context, snapshot) {
@@ -142,10 +141,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     double totalIncome = snapshot.data ?? 0.0;
                     return Text(
                       '\$ ${totalIncome.toStringAsFixed(2)}',
-                      // Display total income
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 30,
+                        fontSize: 26,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
                         height: 0,
@@ -157,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(220, 315, 0, 0),
+              padding: EdgeInsets.fromLTRB(screenWidth * 0.53, 315, screenWidth * 0.10, 15),
               child: FutureBuilder<double>(
                 future: _getTotalExpense(),
                 builder: (context, expenseSnapshot) {
@@ -173,10 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     return Text(
                       '\$ ${totalExpense.toStringAsFixed(2)}',
-                      // Display total income
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 30,
+                        fontSize: 26,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
                         height: 0,
@@ -188,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(45, 210, 0, 0),
+              padding: EdgeInsets.fromLTRB(screenWidth * 0.10, 210, screenWidth * 0.10,  0),
               child: FutureBuilder<double>(
                 future: _getProgrammaticTotalBalance(),
                 builder: (context, snapshot) {
@@ -204,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       '\$ ${totalBalance.toStringAsFixed(2)}',
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 30,
+                        fontSize: 26,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
                         height: 0,
@@ -216,16 +213,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 0, top: 0),
+              padding: EdgeInsets.only(left: screenWidth * 0.008, top: 0),
               child: Image.asset(
                 'assets/image/Frame5.png',
-                width: 110,
+                width: 85,
                 height: 600,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(top: 290, left: 75),
-              child: Text(
+            Padding(
+              padding: EdgeInsets.only(top: 292, left: screenWidth * 0.17),
+              child: const Text(
                 'Income',
                 style: TextStyle(
                   color: Color(0xFFD0E5E3),
@@ -238,16 +235,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 0, left: 173),
+              padding: EdgeInsets.only(top: 0, left: screenWidth * 0.40),
               child: Image.asset(
                 'assets/image/Frame7.png',
                 width: 110,
                 height: 600,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 250, top: 290),
-              child: Text(
+            Padding(
+              padding: EdgeInsets.only(left: screenWidth * 0.60, top: 292),
+              child: const Text(
                 'Expenses',
                 style: TextStyle(
                   color: Color(0xFFD0E5E3),
@@ -260,9 +257,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Row(
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(20, 390, 0, 0),
-                  child: Text(
+                Padding(
+                  padding: EdgeInsets.fromLTRB(screenWidth * 0.10, 390, 0, 0),
+                  child: const Text(
                     'Transaction History',
                     style: TextStyle(
                       color: Color(0xFF222222),
@@ -275,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(150, 390, 0, 0),
+                  padding: EdgeInsets.fromLTRB(screenWidth * 0.2, 390, 0, 0),
                   child: TextButton(
                     onPressed: () {
                       Get.to(() => AllTransaction());
@@ -288,7 +285,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            Padding(padding: const EdgeInsets.only(top: 180, left: 270),
+            Padding(
+              padding: EdgeInsets.only(top: 180, left: screenWidth * 0.6, right: screenWidth * 0.01),
               child: ElevatedButton(
                 onPressed: () {
                   _clearData();
@@ -296,8 +294,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF438883),
                 ),
-                child: const Text('Clear Data',
-                  style:TextStyle(
+                child: const Text(
+                  'Clear Data',
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,
                     fontFamily: 'Inter',
@@ -305,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 0,
                   ),
                 ),
-              )
+              ),
             ),
           ],
         ),
@@ -385,7 +384,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Data Cleared Successfully',
+          content: const Text(
+            'Data Cleared Successfully',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -400,14 +400,6 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           backgroundColor: const Color(0xFF438883),
-          // action: SnackBarAction(
-          //   label: 'Undo',
-          //   onPressed: () async {
-          //     await _restoreData(backupData);
-          //     setState(() {});
-          //     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          //   },
-          // ),
         ),
       );
       setState(() {});
@@ -415,7 +407,8 @@ class _HomeScreenState extends State<HomeScreen> {
       print('Error clearing data: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Error clearing data',
+          content: const Text(
+            'Error clearing data',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -458,44 +451,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return backupData;
   }
-  // Future<void> _restoreData(List<Map<String, dynamic>> backupData) async {
-  //   try {
-  //     for (var data in backupData) {
-  //       print('Restoring data: $data');
-  //
-  //       // Adjust the amount based on the type
-  //       var amount = data['amount'] is num
-  //           ? data['amount'].toDouble()
-  //           : double.tryParse(data['amount']) ?? 0.0;
-  //
-  //       // Update the 'type' field based on the type
-  //       TransactionType type = data['type'] == 'Income'
-  //           ? TransactionType.Income
-  //           : TransactionType.Expense;
-  //
-  //       // Create a map with common fields
-  //       var restoredData = {
-  //         'amount': amount,
-  //         'date': data['date'],
-  //       };
-  //
-  //       // Add 'name' field if the type is 'Income'
-  //       if (type == TransactionType.Income) {
-  //         restoredData['name'] = data['name'];
-  //       }
-  //
-  //       // Restore the data with adjusted amount and type
-  //       await FirebaseFirestore.instance
-  //           .collection(type == TransactionType.Income ? 'incomes' : 'expense')
-  //           .add(restoredData);
-  //
-  //       // Add print statement to check where the data is restored
-  //       print('Restored to ${type == TransactionType.Income ? 'Income' : 'Expense'} collection');
-  //     }
-  //   } catch (e) {
-  //     print('Error restoring data: $e');
-  //   }
-  // }
 }
 
 enum TransactionType { incomes, expense }

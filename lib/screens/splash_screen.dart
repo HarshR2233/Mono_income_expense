@@ -7,7 +7,7 @@ class SplashController extends GetxController {
   void onInit() {
     super.onInit();
     Future.delayed(const Duration(seconds: 3), () {
-      Get.off(() =>  onboarding());
+      Get.off(() =>  Onboarding());
     });
   }
 }
@@ -31,7 +31,7 @@ class splash extends StatelessWidget {
           ),
           child: const Center(
             child: Text(
-              'mono',
+              'MONO',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

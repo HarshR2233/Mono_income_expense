@@ -6,6 +6,9 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -13,29 +16,29 @@ class Profile extends StatelessWidget {
             child: Image.asset('assets/image/Rectangle9.png'),
           ),
           Positioned(
-            top: 8,
-            left: 3,
+            top: screenHeight * 0.01,
+            left: screenWidth * 0.005,
             child: Image.asset('assets/image/Ellipse7.png'),
           ),
           Positioned(
-            top: 8,
-            left: 50,
+            top: screenHeight * 0.01,
+            left: screenWidth * 0.05,
             child: Image.asset('assets/image/Ellipse8.png'),
           ),
           Positioned(
-            top: 8,
-            left: 120,
+            top: screenHeight * 0.01,
+            left: screenWidth * 0.12,
             child: Image.asset('assets/image/Ellipse9.png'),
           ),
           Positioned(
-            top: 95,
-            left: 350,
+            top: screenHeight * 0.11,
+            left: screenWidth * 0.80,
             child: Image.asset('assets/image/bell1.png'),
           ),
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(25, 80, 0, 0),
+                padding: EdgeInsets.fromLTRB(screenWidth * 0.10, screenHeight * 0.1, 0, 0),
                 child: IconButton(
                   onPressed: () {
                     Get.back(); // Navigate back using GetX
@@ -43,13 +46,13 @@ class Profile extends StatelessWidget {
                   icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(105, 80, 0, 0),
+              Padding(
+                padding: EdgeInsets.fromLTRB(screenWidth * 0.20, screenHeight * 0.1, 0, 0),
                 child: Text(
                   'Profile',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: screenWidth * 0.05,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
                     height: 0,
@@ -61,42 +64,42 @@ class Profile extends StatelessWidget {
           Stack(
             children: [
               Positioned(
-                top: 220,
-                left: 140,
+                top: screenHeight * 0.24,
+                left: screenWidth * 0.35,
                 child: Image.asset('assets/image/Ellipse62.png'),
               ),
               Positioned(
-                top: 220,
-                left: 140,
+                top: screenHeight * 0.24,
+                left: screenWidth * 0.35,
                 child: Image.asset('assets/image/Ellipse63.png'),
               ),
               Positioned(
-                top: 230,
-                left: 140,
+                top: screenHeight * 0.24,
+                left: screenWidth * 0.35,
                 child: Image.asset('assets/image/Woman 1.png'),
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 350, left: 140),
+          Padding(
+            padding: EdgeInsets.only(top: screenHeight * 0.38, left: screenWidth * 0.35),
             child: Text(
               'Harsh Rathod',
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: screenWidth * 0.055,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w600,
                 height: 0,
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 380, left: 150),
+          Padding(
+            padding: EdgeInsets.only(top: screenHeight * 0.41, left: screenWidth * 0.40),
             child: Text(
               '@harsh_rathod',
               style: TextStyle(
                 color: Colors.blue,
-                fontSize: 14,
+                fontSize: screenWidth * 0.035,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w600,
                 height: 0,
