@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -15,7 +14,7 @@ class AllTransaction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF2E7E78),
+        backgroundColor: const Color(0xFF2E7E78),
         title:const Text(
           'Transactions',
           style: TextStyle(
@@ -46,9 +45,32 @@ class AllTransaction extends StatelessWidget {
                         valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
                       );
                     } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
+                      return Center(
+                        child: Text(
+                          'Error: ${snapshot.error}',
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
                     } else {
                       List<TransactionEntry> transactionHistory = snapshot.data ?? [];
+                      if (transactionHistory.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            'No transaction history available.',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        );
+                      }
                       return ListView.builder(
                         itemCount: transactionHistory.length,
                         itemBuilder: (context, index) {

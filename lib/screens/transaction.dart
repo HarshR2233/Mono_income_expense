@@ -21,19 +21,23 @@ class _TransactionState extends State<Transaction> {
   late List<CharData> expenseData;
 
   double findMinXValue(List<CharData> data) {
-    return data.map((datum) => datum.day).reduce((value, element) => value < element ? value : element).toDouble();
+    return data.map((datum) => datum.day).reduce((value, element) =>
+    value < element ? value : element).toDouble();
   }
 
   double findMaxXValue(List<CharData> data) {
-    return data.map((datum) => datum.day).reduce((value, element) => value > element ? value : element).toDouble();
+    return data.map((datum) => datum.day).reduce((value, element) =>
+    value > element ? value : element).toDouble();
   }
 
   double findMinYValue(List<CharData> data) {
-    return data.map((datum) => datum.price).reduce((value, element) => value < element ? value : element);
+    return data.map((datum) => datum.price).reduce((value, element) =>
+    value < element ? value : element);
   }
 
   double findMaxYValue(List<CharData> data) {
-    return data.map((datum) => datum.price).reduce((value, element) => value > element ? value : element);
+    return data.map((datum) => datum.price).reduce((value, element) =>
+    value > element ? value : element);
   }
 
   late List<CharData> selectedData;
@@ -50,16 +54,17 @@ class _TransactionState extends State<Transaction> {
     expenseData = [];
     selectedData = [];
     selectedDropdownValue = 'Income';
-    selectedFilter = 'Days'; // Default filter
+    selectedFilter = 'Days';
     fetchDataFromFirestore(startDate, endDate);
   }
 
-  Future<void> fetchDataFromFirestore(DateTime startDate, DateTime endDate) async {
+  Future<void> fetchDataFromFirestore(DateTime startDate,
+      DateTime endDate) async {
     QuerySnapshot incomeSnapshot = await FirebaseFirestore.instance
         .collection('incomes')
         .where('date', isGreaterThanOrEqualTo: startDate)
         .where('date', isLessThanOrEqualTo: endDate)
-        .orderBy('date') // Sort by date
+        .orderBy('date')
         .get();
 
     incomeData = incomeSnapshot.docs.map((doc) {
@@ -75,7 +80,7 @@ class _TransactionState extends State<Transaction> {
         .collection('expense')
         .where('date', isGreaterThanOrEqualTo: startDate)
         .where('date', isLessThanOrEqualTo: endDate)
-        .orderBy('date') // Sort by date
+        .orderBy('date')
         .get();
 
     expenseData = expenseSnapshot.docs.map((doc) {
@@ -87,7 +92,8 @@ class _TransactionState extends State<Transaction> {
       return CharData(date.day, double.parse(amount));
     }).toList();
 
-    selectedData = (selectedDropdownValue == 'Income') ? incomeData : expenseData;
+    selectedData =
+    (selectedDropdownValue == 'Income') ? incomeData : expenseData;
     applyFilter();
 
     setState(() {});
@@ -95,29 +101,38 @@ class _TransactionState extends State<Transaction> {
 
   void applyFilter() {
     if (selectedFilter == 'Days') {
-      selectedData = (selectedDropdownValue == 'Income') ? incomeData : expenseData;
+      selectedData =
+      (selectedDropdownValue == 'Income') ? incomeData : expenseData;
     } else if (selectedFilter == 'Weekly') {
-      selectedData = aggregateDataBy(selectedData, (data) => data.day ~/ 7, (groupedData) {
-        int weekDay = groupedData[0].day;
-        double totalAmount = groupedData.map((data) => data.price).reduce((a, b) => a + b);
-        return CharData(weekDay, totalAmount);
-      });
+      selectedData =
+          aggregateDataBy(selectedData, (data) => data.day ~/ 7, (groupedData) {
+            int weekDay = groupedData[0].day;
+            double totalAmount = groupedData.map((data) => data.price).reduce((
+                a, b) => a + b);
+            return CharData(weekDay, totalAmount);
+          });
     } else if (selectedFilter == 'Monthly') {
-      selectedData = aggregateDataBy(selectedData, (data) => data.day ~/ 30, (groupedData) {
+      selectedData = aggregateDataBy(
+          selectedData, (data) => data.day ~/ 30, (groupedData) {
         int monthDay = groupedData[0].day;
-        double totalAmount = groupedData.map((data) => data.price).reduce((a, b) => a + b);
+        double totalAmount = groupedData.map((data) => data.price).reduce((a,
+            b) => a + b);
         return CharData(monthDay, totalAmount);
       });
     } else if (selectedFilter == 'Yearly') {
-      selectedData = aggregateDataBy(selectedData, (data) => data.day ~/ 365, (groupedData) {
+      selectedData = aggregateDataBy(
+          selectedData, (data) => data.day ~/ 365, (groupedData) {
         int yearDay = groupedData[0].day;
-        double totalAmount = groupedData.map((data) => data.price).reduce((a, b) => a + b);
+        double totalAmount = groupedData.map((data) => data.price).reduce((a,
+            b) => a + b);
         return CharData(yearDay, totalAmount);
       });
     }
   }
 
-  List<CharData> aggregateDataBy(List<CharData> data, int Function(CharData) groupKey, CharData Function(List<CharData>) aggregator) {
+  List<CharData> aggregateDataBy(List<CharData> data,
+      int Function(CharData) groupKey,
+      CharData Function(List<CharData>) aggregator) {
     Map<int, List<CharData>> groupedData = {};
 
     for (var datum in data) {
@@ -164,8 +179,14 @@ class _TransactionState extends State<Transaction> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return Scaffold(
       appBar: AppBar(
@@ -187,9 +208,8 @@ class _TransactionState extends State<Transaction> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Align children to the right
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Other widgets...
                 Align(
                   alignment: Alignment.centerRight,
                   child: Container(
@@ -218,7 +238,9 @@ class _TransactionState extends State<Transaction> {
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedDropdownValue = newValue!;
-                          selectedData = (selectedDropdownValue == 'Income') ? incomeData : expenseData;
+                          selectedData = (selectedDropdownValue == 'Income')
+                              ? incomeData
+                              : expenseData;
                           applyFilter();
                         });
                       },
@@ -249,7 +271,9 @@ class _TransactionState extends State<Transaction> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Days' ? const Color(0xFF438883) : Colors.transparent,
+                    primary: selectedFilter == 'Days'
+                        ? const Color(0xFF438883)
+                        : Colors.transparent,
                     onPrimary: Colors.white,
                   ),
                   child: const Text('Days'),
@@ -263,7 +287,8 @@ class _TransactionState extends State<Transaction> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Weekly' ? const Color(0xFF438883) : Colors.transparent,
+                    primary: selectedFilter == 'Weekly' ? const Color(
+                        0xFF438883) : Colors.transparent,
                     onPrimary: Colors.white,
                   ),
                   child: const Text('Weekly'),
@@ -277,7 +302,8 @@ class _TransactionState extends State<Transaction> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Monthly' ? const Color(0xFF438883) : Colors.transparent,
+                    primary: selectedFilter == 'Monthly' ? const Color(
+                        0xFF438883) : Colors.transparent,
                     onPrimary: Colors.white,
                   ),
                   child: const Text('Monthly'),
@@ -291,7 +317,8 @@ class _TransactionState extends State<Transaction> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Yearly' ? const Color(0xFF438883) : Colors.transparent,
+                    primary: selectedFilter == 'Yearly' ? const Color(
+                        0xFF438883) : Colors.transparent,
                     onPrimary: Colors.white,
                   ),
                   child: const Text('Yearly'),
@@ -300,9 +327,10 @@ class _TransactionState extends State<Transaction> {
             ),
             const SizedBox(height: 20),
             Container(
-              height: screenHeight * 0.2,
-              width: screenWidth * 0.9,
-              child: SfCartesianChart(
+              height: screenHeight * 0.3,
+              width: screenWidth * 0.8,
+              child: selectedData.isNotEmpty
+              ? SfCartesianChart(
                 margin: const EdgeInsets.all(0),
                 borderWidth: 0,
                 borderColor: Colors.transparent,
@@ -315,7 +343,6 @@ class _TransactionState extends State<Transaction> {
                   borderWidth: 0,
                   borderColor: Colors.transparent,
                 ),
-
                 primaryYAxis: NumericAxis(
                   minimum: findMinYValue(selectedData),
                   maximum: findMaxYValue(selectedData),
@@ -332,7 +359,8 @@ class _TransactionState extends State<Transaction> {
                     gradient: LinearGradient(
                       colors: [
                         const Color(0xFF438883),
-                        (selectedDropdownValue == 'Income') ? Colors.green.shade50 : Colors.red.shade50,
+                        (selectedDropdownValue == 'Income') ? Colors.green
+                            .shade50 : Colors.red.shade50,
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -352,11 +380,52 @@ class _TransactionState extends State<Transaction> {
                     yValueMapper: (CharData data, _) => data.price,
                   ),
                 ],
+              ) : const CircularProgressIndicator(),
+            ),
+
+            // Add a ListView
+            Expanded(
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 120),
+                    child: Text(
+                      'Top Spending Items',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  // Display the top spending items
+                  for (var item in getTopSpendingItems(selectedData))
+                    ListTile(
+                      title: Text(
+                          '${item.day}: \$${item.price.toStringAsFixed(2)}'),
+                    ),
+                ],
               ),
             ),
           ],
         ),
       ),
     );
+  }
+  List<CharData> getTopSpendingItems(List<CharData> data) {
+    // Sort the data in descending order based on the price and name
+    List<CharData> sortedData = List.from(data);
+    sortedData.sort((a, b) {
+      int priceComparison = b.price.compareTo(a.price);
+      if (priceComparison == 0) {
+        // If prices are equal, sort by name
+        return a.day.compareTo(b.day);
+      }
+      return priceComparison;
+    });
+
+    // Take the top 5 spending items (you can adjust the number as needed)
+    List<CharData> topItems = sortedData.take(4).toList();
+
+    return topItems;
   }
 }
