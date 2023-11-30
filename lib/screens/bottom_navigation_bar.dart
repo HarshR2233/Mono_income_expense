@@ -19,7 +19,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   int currentTab = 0;
   final List<Widget> screens = [
-    HomeScreen(),
+    const HomeScreen(),
     const Transaction(),
     const Wallet(),
     const Profile(),
@@ -38,19 +38,19 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           },
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
+              icon: Icon(Icons.home),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.leaderboard_outlined),
+              icon: Icon(Icons.leaderboard),
               label: 'Statistics',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet_outlined),
+              icon: Icon(Icons.account_balance_wallet),
               label: 'Wallet',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_2_outlined),
+              icon: Icon(Icons.person_2),
               label: 'Profile',
             ),
           ],
@@ -71,7 +71,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         animatedIconTheme: const IconThemeData(size: 22.0),
         children: [
           SpeedDialChild(
-            child: const Icon(Icons.add, color: Colors.white),
+            child: const Icon(Icons.add,color: Colors.white),
             label: 'Add Income',
             labelStyle: const TextStyle(
               color: Colors.white,

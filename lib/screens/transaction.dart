@@ -207,58 +207,6 @@ class _TransactionState extends State<Transaction> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    width: screenWidth * 0.3, // Adjust the width as needed
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                    ),
-                    child: DropdownButton<String>(
-                      value: selectedDropdownValue,
-                      items: dropdownItems.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(
-                              fontSize: screenWidth * 0.04,
-                              color: Colors.black,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedDropdownValue = newValue!;
-                          selectedData = (selectedDropdownValue == 'Income')
-                              ? incomeData
-                              : expenseData;
-                          applyFilter();
-                        });
-                      },
-                      style: TextStyle(
-                        fontSize: screenWidth * 0.020,
-                        color: Colors.black,
-                      ),
-                      icon: const Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.black,
-                        size: 24,
-                      ),
-                      elevation: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -324,6 +272,42 @@ class _TransactionState extends State<Transaction> {
                   child: const Text('Yearly'),
                 ),
               ],
+            ),
+            Padding(padding: EdgeInsets.only(top: 20,left: 200),
+              child:DropdownButton<String>(
+                value: selectedDropdownValue,
+                items: dropdownItems.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04,
+                        color: Colors.black,
+                      ),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedDropdownValue = newValue!;
+                    selectedData = (selectedDropdownValue == 'Income')
+                        ? incomeData
+                        : expenseData;
+                    applyFilter();
+                  });
+                },
+                style: TextStyle(
+                  fontSize: screenWidth * 0.020,
+                  color: Colors.black,
+                ),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.black,
+                  size: 24,
+                ),
+                elevation: 16,
+              ),
             ),
             const SizedBox(height: 20),
             Container(
