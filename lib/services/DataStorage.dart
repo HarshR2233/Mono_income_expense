@@ -1,4 +1,4 @@
-import 'package:shared_preferences/shared_preferences.dart' show SharedPreferences;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DataStorage {
   static const String _currentMonthKey = 'currentMonth';
