@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:income_expense/screens/bottom_navigation_bar.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   runApp(
@@ -17,8 +18,10 @@ class AddIncome extends StatefulWidget {
 }
 
 class _AddIncomeState extends State<AddIncome> {
+  final decimalFormatter = FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _amountController = TextEditingController();
+
 
   CollectionReference incomeCollection = FirebaseFirestore.instance.collection('incomes');
 
@@ -261,6 +264,7 @@ class _AddIncomeState extends State<AddIncome> {
                         child: TextFormField(
                           controller: _amountController,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [decimalFormatter],
                           validator: _validateAmount,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(

@@ -308,15 +308,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.only(top: 400),
+            Padding(padding: const EdgeInsets.only(top: 400),
              child:Container(
               height: 400,
              child :FutureBuilder<List<TransactionEntry>>(
               future: _getTransactionHistory(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
+                  return const Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
+                  ),
                   );
                 } else if (snapshot.hasError) {
                   return Center(
@@ -346,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
                   return ListView.builder(
-                    itemCount: 4,
+                    itemCount: transactionHistory.length > 4 ? 4 : transactionHistory.length,
                     itemBuilder: (context, index) {
                       var entry = transactionHistory[index]; // Retrieve the transaction entry
 

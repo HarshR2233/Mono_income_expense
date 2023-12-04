@@ -51,7 +51,7 @@ class Onboarding extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -72,7 +72,7 @@ class Onboarding extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.013),
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: 64,

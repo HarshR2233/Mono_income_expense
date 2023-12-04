@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:income_expense/screens/bottom_navigation_bar.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   runApp(
@@ -17,6 +18,7 @@ class AddExpense extends StatefulWidget {
 }
 
 class _AddExpenseState extends State<AddExpense> {
+  final decimalFormatter = FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _amountController = TextEditingController();
 
@@ -179,60 +181,60 @@ class _AddExpenseState extends State<AddExpense> {
                         width: screenWidth * 0.725,
                         child: Obx(
                               () => DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              contentPadding: EdgeInsets.only(right: screenWidth * 0.01, left: screenWidth * 0.01),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(screenWidth * 0.02),
+                                decoration: InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  contentPadding: EdgeInsets.only(right: screenWidth * 0.01, left: screenWidth * 0.01),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(screenWidth * 0.02),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(screenWidth * 0.02),
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(screenWidth * 0.02),
+                                    ),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: screenWidth * 0.001, color: Colors.red),
+                                    borderRadius: BorderRadius.circular(screenWidth * 0.01),
+                                  ),
                                 ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(screenWidth * 0.02),
+                                elevation: 1,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Select game';
+                                  } else {
+                                    return null;
+                                  }
+                                  },
+                                isExpanded: true,
+                                hint: const Text("Favourite game"),
+                                iconSize: screenWidth * 0.03,
+                                iconEnabledColor: Colors.black,
+                                icon: Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                  size: screenWidth * 0.015,
                                 ),
+                                value: selectedValue.value,
+                                items: dropdownItems.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(item),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  selectedValue(newValue ?? 'Netflix');
+                                  },
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(screenWidth * 0.02),
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: screenWidth * 0.001, color: Colors.red),
-                                borderRadius: BorderRadius.circular(screenWidth * 0.01),
-                              ),
-                            ),
-                            elevation: 1,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Select game';
-                              } else {
-                                return null;
-                              }
-                            },
-                            isExpanded: true,
-                            hint: const Text("Favourite game"),
-                            iconSize: screenWidth * 0.03,
-                            iconEnabledColor: Colors.black,
-                            icon: Icon(
-                              Icons.arrow_drop_down_sharp,
-                              size: screenWidth * 0.015,
-                            ),
-                            value: selectedValue.value,
-                            items: dropdownItems.map((String item) {
-                              return DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              selectedValue(newValue ?? 'Netflix');
-                            },
-                          ),
                         ),
                       ),
                     ),
@@ -265,6 +267,7 @@ class _AddExpenseState extends State<AddExpense> {
                         child: TextFormField(
                           controller: _amountController,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [decimalFormatter],
                           validator: _validateAmount,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(

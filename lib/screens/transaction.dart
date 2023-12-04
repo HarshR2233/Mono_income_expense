@@ -7,7 +7,11 @@ class CharData {
   final double price;
 
   CharData(this.day, this.price);
+
+  int get x => day;
+  double get y => price;
 }
+
 
 class Transaction extends StatefulWidget {
   const Transaction({Key? key}) : super(key: key);
@@ -20,24 +24,32 @@ class _TransactionState extends State<Transaction> {
   late List<CharData> incomeData;
   late List<CharData> expenseData;
 
+  bool isLoading = false;
+
   double findMinXValue(List<CharData> data) {
-    return data.map((datum) => datum.day).reduce((value, element) =>
-    value < element ? value : element).toDouble();
+    return data
+        .map((datum) => datum.day)
+        .reduce((value, element) => value < element ? value : element)
+        .toDouble();
   }
 
   double findMaxXValue(List<CharData> data) {
-    return data.map((datum) => datum.day).reduce((value, element) =>
-    value > element ? value : element).toDouble();
+    return data
+        .map((datum) => datum.day)
+        .reduce((value, element) => value > element ? value : element)
+        .toDouble();
   }
 
   double findMinYValue(List<CharData> data) {
-    return data.map((datum) => datum.price).reduce((value, element) =>
-    value < element ? value : element);
+    return data
+        .map((datum) => datum.price)
+        .reduce((value, element) => value < element ? value : element);
   }
 
   double findMaxYValue(List<CharData> data) {
-    return data.map((datum) => datum.price).reduce((value, element) =>
-    value > element ? value : element);
+    return data
+        .map((datum) => datum.price)
+        .reduce((value, element) => value > element ? value : element);
   }
 
   late List<CharData> selectedData;
@@ -58,8 +70,10 @@ class _TransactionState extends State<Transaction> {
     fetchDataFromFirestore(startDate, endDate);
   }
 
-  Future<void> fetchDataFromFirestore(DateTime startDate,
-      DateTime endDate) async {
+  Future<void> fetchDataFromFirestore(DateTime startDate, DateTime endDate) async {
+    setState(() {
+      isLoading = true;
+    });
     QuerySnapshot incomeSnapshot = await FirebaseFirestore.instance
         .collection('incomes')
         .where('date', isGreaterThanOrEqualTo: startDate)
@@ -96,7 +110,9 @@ class _TransactionState extends State<Transaction> {
     (selectedDropdownValue == 'Income') ? incomeData : expenseData;
     applyFilter();
 
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void applyFilter() {
@@ -104,34 +120,33 @@ class _TransactionState extends State<Transaction> {
       selectedData =
       (selectedDropdownValue == 'Income') ? incomeData : expenseData;
     } else if (selectedFilter == 'Weekly') {
-      selectedData =
-          aggregateDataBy(selectedData, (data) => data.day ~/ 7, (groupedData) {
+      selectedData = aggregateDataBy(selectedData, (data) => data.day ~/ 7,
+              (groupedData) {
             int weekDay = groupedData[0].day;
-            double totalAmount = groupedData.map((data) => data.price).reduce((
-                a, b) => a + b);
+            double totalAmount =
+            groupedData.map((data) => data.price).reduce((a, b) => a + b);
             return CharData(weekDay, totalAmount);
           });
     } else if (selectedFilter == 'Monthly') {
-      selectedData = aggregateDataBy(
-          selectedData, (data) => data.day ~/ 30, (groupedData) {
-        int monthDay = groupedData[0].day;
-        double totalAmount = groupedData.map((data) => data.price).reduce((a,
-            b) => a + b);
-        return CharData(monthDay, totalAmount);
-      });
+      selectedData = aggregateDataBy(selectedData, (data) => data.day ~/ 30,
+              (groupedData) {
+            int monthDay = groupedData[0].day;
+            double totalAmount =
+            groupedData.map((data) => data.price).reduce((a, b) => a + b);
+            return CharData(monthDay, totalAmount);
+          });
     } else if (selectedFilter == 'Yearly') {
-      selectedData = aggregateDataBy(
-          selectedData, (data) => data.day ~/ 365, (groupedData) {
-        int yearDay = groupedData[0].day;
-        double totalAmount = groupedData.map((data) => data.price).reduce((a,
-            b) => a + b);
-        return CharData(yearDay, totalAmount);
-      });
+      selectedData = aggregateDataBy(selectedData, (data) => data.day ~/ 365,
+              (groupedData) {
+            int yearDay = groupedData[0].day;
+            double totalAmount =
+            groupedData.map((data) => data.price).reduce((a, b) => a + b);
+            return CharData(yearDay, totalAmount);
+          });
     }
   }
 
-  List<CharData> aggregateDataBy(List<CharData> data,
-      int Function(CharData) groupKey,
+  List<CharData> aggregateDataBy(List<CharData> data, int Function(CharData) groupKey,
       CharData Function(List<CharData>) aggregator) {
     Map<int, List<CharData>> groupedData = {};
 
@@ -179,14 +194,8 @@ class _TransactionState extends State<Transaction> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -235,8 +244,7 @@ class _TransactionState extends State<Transaction> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Weekly' ? const Color(
-                        0xFF438883) : Colors.transparent,
+                    primary: selectedFilter == 'Weekly' ? const Color(0xFF438883) : Colors.transparent,
                     onPrimary: Colors.white,
                   ),
                   child: const Text('Weekly'),
@@ -250,8 +258,7 @@ class _TransactionState extends State<Transaction> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Monthly' ? const Color(
-                        0xFF438883) : Colors.transparent,
+                    primary: selectedFilter == 'Monthly' ? const Color(0xFF438883) : Colors.transparent,
                     onPrimary: Colors.white,
                   ),
                   child: const Text('Monthly'),
@@ -265,16 +272,16 @@ class _TransactionState extends State<Transaction> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Yearly' ? const Color(
-                        0xFF438883) : Colors.transparent,
+                    primary: selectedFilter == 'Yearly' ? const Color(0xFF438883) : Colors.transparent,
                     onPrimary: Colors.white,
                   ),
                   child: const Text('Yearly'),
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.only(top: 20,left: 200),
-              child:DropdownButton<String>(
+            Padding(
+              padding: const EdgeInsets.only(top: 20, left: 200),
+              child: DropdownButton<String>(
                 value: selectedDropdownValue,
                 items: dropdownItems.map((String value) {
                   return DropdownMenuItem<String>(
@@ -312,9 +319,16 @@ class _TransactionState extends State<Transaction> {
             const SizedBox(height: 20),
             Container(
               height: screenHeight * 0.3,
-              width: screenWidth * 0.8,
-              child: selectedData.isNotEmpty
-              ? SfCartesianChart(
+              width: screenWidth * 0.9,
+              child: isLoading
+                  ? const Center(
+                child: CircularProgressIndicator(
+                  valueColor:
+                  AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
+                ),
+              )
+                  : selectedData.isNotEmpty
+                  ? SfCartesianChart(
                 margin: const EdgeInsets.all(0),
                 borderWidth: 0,
                 borderColor: Colors.transparent,
@@ -328,8 +342,8 @@ class _TransactionState extends State<Transaction> {
                   borderColor: Colors.transparent,
                 ),
                 primaryYAxis: NumericAxis(
-                  minimum: findMinYValue(selectedData),
-                  maximum: findMaxYValue(selectedData),
+                  minimum: 9000,
+                  maximum: 25000,
                   isVisible: false,
                   borderWidth: 0,
                   borderColor: Colors.transparent,
@@ -339,18 +353,22 @@ class _TransactionState extends State<Transaction> {
                     dataSource: selectedData,
                     xValueMapper: (CharData data, _) => data.day,
                     yValueMapper: (CharData data, _) => data.price,
+                    dataLabelSettings: const DataLabelSettings(
+                      isVisible: false,
+                    ),
                     splineType: SplineType.natural,
                     gradient: LinearGradient(
                       colors: [
                         const Color(0xFF438883),
-                        (selectedDropdownValue == 'Income') ? Colors.green
-                            .shade50 : Colors.red.shade50,
+                        (selectedDropdownValue == 'Income')
+                            ? Colors.green.shade50
+                            : Colors.red.shade50,
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
                   ),
-                  SplineSeries(
+                  SplineSeries<CharData, int>(
                     color: const Color(0xFF438883),
                     width: 4,
                     markerSettings: const MarkerSettings(
@@ -364,10 +382,36 @@ class _TransactionState extends State<Transaction> {
                     yValueMapper: (CharData data, _) => data.price,
                   ),
                 ],
-              ) : const CircularProgressIndicator(),
+                tooltipBehavior: TooltipBehavior(
+                  enable: true,
+                  builder: (dynamic data, dynamic point,
+                      dynamic series, int pointIndex,
+                      int seriesIndex) {
+                    return Container(
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF438883),
+                        borderRadius: BorderRadius.circular(8.0),
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Color(0xFF438883), blurRadius: 5.0),
+                        ],
+                      ),
+                      child: Text(
+                        'Day: ${data.x}\nPrice: ${data.y}',
+                        style: const TextStyle(color: Colors.white, fontSize: 14, fontFamily: 'Inter', fontWeight: FontWeight.bold),
+                      ),
+                    );
+                  },
+                ),
+              )
+                  : const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Color(0xFF2E7E78)),
+                ),
+              ),
             ),
-
-            // Add a ListView
             Expanded(
               child: ListView(
                 children: [
@@ -381,7 +425,6 @@ class _TransactionState extends State<Transaction> {
                       ),
                     ),
                   ),
-                  // Display the top spending items
                   for (var item in getTopSpendingItems(selectedData))
                     ListTile(
                       title: Text(
@@ -395,19 +438,17 @@ class _TransactionState extends State<Transaction> {
       ),
     );
   }
+
   List<CharData> getTopSpendingItems(List<CharData> data) {
-    // Sort the data in descending order based on the price and name
     List<CharData> sortedData = List.from(data);
     sortedData.sort((a, b) {
       int priceComparison = b.price.compareTo(a.price);
       if (priceComparison == 0) {
-        // If prices are equal, sort by name
         return a.day.compareTo(b.day);
       }
       return priceComparison;
     });
 
-    // Take the top 5 spending items (you can adjust the number as needed)
     List<CharData> topItems = sortedData.take(4).toList();
 
     return topItems;
