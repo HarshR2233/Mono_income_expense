@@ -46,7 +46,7 @@ dependencies:
   fl_chart: ^0.65.0
   shared_preferences: ^2.0.8
   flutter_background_service: ^5.0.5
-  background_fetch: ^1.2.1
+
 
 dev_dependencies:
   flutter_test:

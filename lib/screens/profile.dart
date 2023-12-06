@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:income_expense/screens/invite_friend.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({Key? key}) : super(key: key);
+  const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +106,96 @@ class Profile extends StatelessWidget {
                 height: 0,
               ),
             ),
+          ),
+          Padding(padding: const EdgeInsets.only(top: 400),
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InviteFriends()));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset('assets/image/glossy.png', width: 24, height: 24),
+                  const SizedBox(width: 8),
+                  const Text('Invite friends',style: TextStyle(color: Colors.black,fontSize: 18,fontFamily: 'inter'),),
+                ],
+              ),
+            )
+          ),
+          Padding(padding: const EdgeInsets.only(top: 430),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InviteFriends()));
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.person),
+                    SizedBox(width: 8),
+                    Text('Accont Info',style: TextStyle(color: Colors.black,fontSize: 18,fontFamily: 'inter'),),
+                  ],
+                ),
+              )
+          ),
+          Padding(padding: const EdgeInsets.only(top: 460),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InviteFriends()));
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.people),
+                    SizedBox(width: 8),
+                    Text('Personal profile',style: TextStyle(color: Colors.black,fontSize: 18,fontFamily: 'inter'),),
+                  ],
+                ),
+              )
+          ),
+          Padding(padding: const EdgeInsets.only(top: 490),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InviteFriends()));
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.mail_rounded),
+                    SizedBox(width: 8),
+                    Text('Message center',style: TextStyle(color: Colors.black,fontSize: 18,fontFamily: 'inter'),),
+                  ],
+                ),
+              )
+          ),
+          Padding(padding: const EdgeInsets.only(top: 520),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InviteFriends()));
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.security),
+                    SizedBox(width: 8),
+                    Text('Login and security',style: TextStyle(color: Colors.black,fontSize: 18,fontFamily: 'inter'),),
+                  ],
+                ),
+              )
+          ),
+          Padding(padding: const EdgeInsets.only(top: 550),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InviteFriends()));
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.lock),
+                    SizedBox(width: 8),
+                    Text('Data and privacy',style: TextStyle(color: Colors.black,fontSize: 18,fontFamily: 'inter'),),
+                  ],
+                ),
+              )
           ),
         ],
       ),

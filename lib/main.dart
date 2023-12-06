@@ -3,7 +3,6 @@ import 'package:income_expense/screens/onboarding.dart';
 import 'package:income_expense/screens/splash_screen.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'services/background_service.dart';
 
 
 
@@ -26,5 +25,4 @@ void main() async {
       ],
     ),
   );
-  BackgroundService.start();
 }

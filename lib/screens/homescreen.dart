@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: screenWidth * 0.008, top: 0),
+              padding: EdgeInsets.only(left: screenWidth * 0.009, top: 0),
               child: Image.asset(
                 'assets/image/Frame5.png',
                 width: 85,
@@ -233,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 0, left: screenWidth * 0.40),
+              padding: EdgeInsets.only(top: 0, left: screenWidth * 0.41),
               child: Image.asset(
                 'assets/image/Frame7.png',
                 width: 110,
