@@ -22,7 +22,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     const HomeScreen(),
     const Transaction(),
     const Wallet(),
-    const Profile(),
+    Profile(),
   ];
 
   @override

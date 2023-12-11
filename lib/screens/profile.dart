@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:income_expense/screens/invite_friend.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+
+  bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -107,9 +114,9 @@ class Profile extends StatelessWidget {
               ),
             ),
           ),
-          Padding(padding: const EdgeInsets.only(top: 400),
-            child: TextButton(
-              onPressed: () {
+          Padding(padding: EdgeInsets.only(top: screenHeight * 0.45,),
+            child: InkWell(
+              onTap: (){
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InviteFriends()));
               },
               child: Row(
@@ -167,20 +174,24 @@ class Profile extends StatelessWidget {
                 ),
               )
           ),
-          Padding(padding: const EdgeInsets.only(top: 520),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InviteFriends()));
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.security),
-                    SizedBox(width: 8),
-                    Text('Login and security',style: TextStyle(color: Colors.black,fontSize: 18,fontFamily: 'inter'),),
-                  ],
-                ),
-              )
+          Padding(
+            padding: const EdgeInsets.only(top: 530),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InviteFriends()));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.security, color: isSelected ? const Color(0xFF438883) : null),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Login and security',
+                    style: TextStyle( fontSize: 18, fontFamily: 'inter'),
+                  ),
+                ],
+              ),
+            ),
           ),
           Padding(padding: const EdgeInsets.only(top: 550),
               child: TextButton(

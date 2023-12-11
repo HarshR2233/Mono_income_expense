@@ -25,9 +25,9 @@ class _AddExpenseState extends State<AddExpense> {
   CollectionReference expenseCollection = FirebaseFirestore.instance.collection('expense');
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
-  RxString selectedValue = 'Netflix'.obs;
+  RxString selectedValue = 'Transfer'.obs;
 
-  List<String> dropdownItems = ['Netflix', 'Youtube', 'Snapchat', 'Amazon Prime'];
+  List<String> dropdownItems = ['Transfer','Subcription','Ticket Booking','Bill Payment'];
 
   String? _validateAmount(String? value) {
     if (value == null || value.isEmpty) {
@@ -67,7 +67,7 @@ class _AddExpenseState extends State<AddExpense> {
       print('Name: ${selectedValue.value}');
       print('Date: ${selectedDate.value}');
       _amountController.clear();
-      selectedValue('Netflix'); // Resetting the value after submission
+      selectedValue('Transfer'); // Resetting the value after submission
 
       Get.offAll(() => const CustomBottomNavigationBar());
     }
@@ -232,7 +232,7 @@ class _AddExpenseState extends State<AddExpense> {
                                   );
                                 }).toList(),
                                 onChanged: (String? newValue) {
-                                  selectedValue(newValue ?? 'Netflix');
+                                  selectedValue(newValue ?? 'Transfer');
                                   },
                               ),
                         ),

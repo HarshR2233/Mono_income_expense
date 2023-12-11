@@ -406,9 +406,12 @@ class _TransactionState extends State<Transaction> {
                 ),
               )
                   : const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Color(0xFF2E7E78)),
+                child:  Text(
+                  'No data available',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
             ),
