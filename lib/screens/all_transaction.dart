@@ -5,17 +5,20 @@ import 'package:intl/intl.dart';
 class AllTransaction extends StatelessWidget {
   AllTransaction({super.key});
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<
+      RefreshIndicatorState>();
 
-  final CollectionReference incomeCollection = FirebaseFirestore.instance.collection('incomes');
-  final CollectionReference expenseCollection = FirebaseFirestore.instance.collection('expense');
+  final CollectionReference incomeCollection = FirebaseFirestore.instance
+      .collection('incomes');
+  final CollectionReference expenseCollection = FirebaseFirestore.instance
+      .collection('expense');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2E7E78),
-        title:const Text(
+        title: const Text(
           'Transactions',
           style: TextStyle(
             color: Colors.white,
@@ -42,7 +45,8 @@ class AllTransaction extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(
+                            0xFF2E7E78)),
                       );
                     } else if (snapshot.hasError) {
                       return Center(
@@ -57,7 +61,8 @@ class AllTransaction extends StatelessWidget {
                         ),
                       );
                     } else {
-                      List<TransactionEntry> transactionHistory = snapshot.data ?? [];
+                      List<TransactionEntry> transactionHistory = snapshot
+                          .data ?? [];
                       if (transactionHistory.isEmpty) {
                         return const Center(
                           child: Text(
@@ -98,10 +103,9 @@ class AllTransaction extends StatelessWidget {
                             ),
                             onDismissed: (direction) async {
                               if (direction == DismissDirection.startToEnd) {
-
                                 await _deleteTransaction(entry);
-                              } else if (direction == DismissDirection.endToStart) {
-
+                              } else
+                              if (direction == DismissDirection.endToStart) {
                                 _showUpdateDialog(context, entry);
 
                                 _refreshIndicatorKey.currentState?.show();
@@ -109,7 +113,8 @@ class AllTransaction extends StatelessWidget {
                             },
                             child: Card(
                               elevation: 3,
-                              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -120,12 +125,15 @@ class AllTransaction extends StatelessWidget {
                                       : 'assets/image/arrowup.png',
                                 ),
                                 title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
                                   children: [
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        entry.name == TransactionType.incomes ? 'Income' : 'Expense',
+                                        entry.name == TransactionType.incomes
+                                            ? 'Income'
+                                            : 'Expense',
                                         style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 20,
@@ -137,9 +145,13 @@ class AllTransaction extends StatelessWidget {
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        '${entry.name == TransactionType.incomes ? '+' : '-'}\$${entry.amount.abs().toStringAsFixed(2)}',
+                                        '${entry.name == TransactionType.incomes
+                                            ? '+'
+                                            : '-'}\$${entry.amount.abs()
+                                            .toStringAsFixed(2)}',
                                         style: TextStyle(
-                                          color: entry.name == TransactionType.incomes
+                                          color: entry.name ==
+                                              TransactionType.incomes
                                               ? const Color(0xFF2E7E78)
                                               : Colors.redAccent,
                                           fontSize: 19,
@@ -180,8 +192,10 @@ class AllTransaction extends StatelessWidget {
     );
   }
 
-  Future<void> _showUpdateDialog(BuildContext context, TransactionEntry entry) async {
-    TextEditingController amountController = TextEditingController(text: entry.amount.toString());
+  Future<void> _showUpdateDialog(BuildContext context,
+      TransactionEntry entry) async {
+    TextEditingController amountController = TextEditingController(
+        text: entry.amount.toString());
 
     return showDialog(
       context: context,
@@ -208,7 +222,8 @@ class AllTransaction extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                double updatedAmount = double.tryParse(amountController.text) ?? 0.0;
+                double updatedAmount = double.tryParse(amountController.text) ??
+                    0.0;
                 await _updateTransaction(entry, updatedAmount);
                 Navigator.of(context).pop();
               },
@@ -235,7 +250,6 @@ class AllTransaction extends StatelessWidget {
         var date = doc['date'];
 
         if (date is Timestamp) {
-          // Extract only the date part
           date = DateFormat('yyyy-MM-dd').format(date.toDate());
         }
 
@@ -244,12 +258,14 @@ class AllTransaction extends StatelessWidget {
             name: TransactionType.incomes,
             amount: amount.toDouble(),
             date: date ?? '',
+            documentId: doc.id, // Retrieve document ID
           ));
         } else if (amount is String) {
           transactionHistory.add(TransactionEntry(
             name: TransactionType.incomes,
             amount: double.tryParse(amount) ?? 0.0,
             date: date ?? '',
+            documentId: doc.id, // Retrieve document ID
           ));
         }
       }
@@ -259,7 +275,6 @@ class AllTransaction extends StatelessWidget {
         var date = doc['date'];
 
         if (date is Timestamp) {
-          // Extract only the date part
           date = DateFormat('yyyy-MM-dd').format(date.toDate());
         }
 
@@ -268,12 +283,14 @@ class AllTransaction extends StatelessWidget {
             name: TransactionType.expense,
             amount: amount.toDouble(),
             date: date ?? '',
+            documentId: doc.id, // Retrieve document ID
           ));
         } else if (amount is String) {
           transactionHistory.add(TransactionEntry(
             name: TransactionType.expense,
             amount: double.tryParse(amount) ?? 0.0,
             date: date ?? '',
+            documentId: doc.id, // Retrieve document ID
           ));
         }
       }
@@ -287,12 +304,11 @@ class AllTransaction extends StatelessWidget {
 
   Future<void> _deleteTransaction(TransactionEntry entry) async {
     try {
-      print('Deleting document with ID: ${entry.date}');
       if (entry.name == TransactionType.incomes) {
-        await incomeCollection.doc(entry.date).delete();
+        await incomeCollection.doc(entry.documentId).delete();
         print('Income deleted successfully');
       } else if (entry.name == TransactionType.expense) {
-        await expenseCollection.doc(entry.date).delete();
+        await expenseCollection.doc(entry.documentId).delete();
         print('Expense deleted successfully');
       }
     } catch (e) {
@@ -303,10 +319,10 @@ class AllTransaction extends StatelessWidget {
   Future<void> _updateTransaction(TransactionEntry entry, double updatedAmount) async {
     try {
       if (entry.name == TransactionType.incomes) {
-        await incomeCollection.doc(entry.date).update({'amount': updatedAmount});
+        await incomeCollection.doc(entry.documentId).update({'amount': updatedAmount});
         print('Income updated successfully');
       } else if (entry.name == TransactionType.expense) {
-        await expenseCollection.doc(entry.date).update({'amount': updatedAmount});
+        await expenseCollection.doc(entry.documentId).update({'amount': updatedAmount});
         print('Expense updated successfully');
       }
     } catch (e) {
@@ -321,10 +337,12 @@ class TransactionEntry {
   final TransactionType name;
   final double amount;
   final String date;
+  final String documentId;
 
   TransactionEntry({
     required this.name,
     required this.amount,
     required this.date,
+    required this.documentId,
   });
 }

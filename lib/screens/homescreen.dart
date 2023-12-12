@@ -292,11 +292,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF438883),
                 ),
-                child:isClearingData
-                    ? const CircularProgressIndicator(
+                child:isClearingData ? const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 )
-                : const Text(
+                    : const Text(
                   'Clear Data',
                   style: TextStyle(
                     color: Colors.white,
@@ -309,146 +308,144 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(padding: const EdgeInsets.only(top: 400),
-             child:Container(
-              height: 400,
-             child :FutureBuilder<List<TransactionEntry>>(
-              future: _getTransactionHistory(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
-                  ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      'Error: ${snapshot.error}',
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  );
-                } else {
-                  List<TransactionEntry> transactionHistory = snapshot.data ?? [];
-                  if (transactionHistory.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        'No transaction history available.',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
+              child:Container(
+                height: 400,
+                child :FutureBuilder<List<TransactionEntry>>(
+                  future: _getTransactionHistory(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
                         ),
-                      ),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: transactionHistory.length > 4 ? 4 : transactionHistory.length,
-                    itemBuilder: (context, index) {
-                      var entry = transactionHistory[index]; // Retrieve the transaction entry
-
-                      return Dismissible(
-                        key: Key(entry.date),
-                        background: Container(
-                          color: Colors.red,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                        ),
-                        secondaryBackground: Container(
-                          color: Colors.blue,
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: const Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        ),
-                        onDismissed: (direction) async {
-                          if (direction == DismissDirection.startToEnd) {
-
-                            await _deleteTransaction(entry);
-                          } else if (direction == DismissDirection.endToStart) {
-
-                            _showUpdateDialog(context, entry);
-
-                            _refreshIndicatorKey.currentState?.show();
-                          }
-                        },
-                        child: Card(
-                          elevation: 3,
-                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: ListTile(
-                            leading: Image.asset(
-                              entry.name == TransactionType.incomes
-                                  ? 'assets/image/arrowdown.png'
-                                  : 'assets/image/arrowup.png',
-                            ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    entry.name == TransactionType.incomes ? 'Income' : 'Expense',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    '${entry.name == TransactionType.incomes ? '+' : '-'}\$${entry.amount.abs().toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                      color: entry.name == TransactionType.incomes
-                                          ? const Color(0xFF2E7E78)
-                                          : Colors.redAccent,
-                                      fontSize: 19,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  entry.date,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          'Error: ${snapshot.error}',
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       );
+                    } else {
+                      List<TransactionEntry> transactionHistory = snapshot.data ?? [];
+                      if (transactionHistory.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            'No transaction history available.',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        );
+                      }
+                      return ListView.builder(
+                        itemCount: transactionHistory.length > 4 ? 4 : transactionHistory.length,
+                        itemBuilder: (context, index) {
+                          var entry = transactionHistory[index];
+                          return Dismissible(
+                            key: Key(entry.date),
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ),
+                            secondaryBackground: Container(
+                              color: Colors.blue,
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            ),
+                            onDismissed: (direction) async {
+                              if (direction == DismissDirection.startToEnd) {
+                                await _deleteTransaction(entry);
+                              } else if (direction == DismissDirection.endToStart) {
+
+                                _showUpdateDialog(context, entry);
+
+                                _refreshIndicatorKey.currentState?.show();
+                              }
+                              },
+                            child: Card(
+                              elevation: 3,
+                              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: ListTile(
+                                leading: Image.asset(
+                                  entry.name == TransactionType.incomes
+                                      ? 'assets/image/arrowdown.png'
+                                      : 'assets/image/arrowup.png',
+                                ),
+                                title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        entry.name == TransactionType.incomes ? 'Income' : 'Expense',
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                          fontFamily: 'Inter',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '${entry.name == TransactionType.incomes ? '+' : '-'}\$${entry.amount.abs().toStringAsFixed(2)}',
+                                        style: TextStyle(
+                                          color: entry.name == TransactionType.incomes
+                                              ? const Color(0xFF2E7E78)
+                                              : Colors.redAccent,
+                                          fontSize: 19,
+                                          fontFamily: 'Inter',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      entry.date,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                          },
+                      );
+                    }
                     },
-                  );
-                }
-              },
-            ),
-            ),
+                ),
+              ),
             ),
           ],
         ),
@@ -663,7 +660,6 @@ class _HomeScreenState extends State<HomeScreen> {
         var date = doc['date'];
 
         if (date is Timestamp) {
-          // Extract only the date part
           date = DateFormat('yyyy-MM-dd').format(date.toDate());
         }
 
@@ -672,12 +668,14 @@ class _HomeScreenState extends State<HomeScreen> {
             name: TransactionType.incomes,
             amount: amount.toDouble(),
             date: date ?? '',
+            documentId: doc.id, // Retrieve document ID
           ));
         } else if (amount is String) {
           transactionHistory.add(TransactionEntry(
             name: TransactionType.incomes,
             amount: double.tryParse(amount) ?? 0.0,
             date: date ?? '',
+            documentId: doc.id, // Retrieve document ID
           ));
         }
       }
@@ -687,7 +685,6 @@ class _HomeScreenState extends State<HomeScreen> {
         var date = doc['date'];
 
         if (date is Timestamp) {
-          // Extract only the date part
           date = DateFormat('yyyy-MM-dd').format(date.toDate());
         }
 
@@ -696,12 +693,14 @@ class _HomeScreenState extends State<HomeScreen> {
             name: TransactionType.expense,
             amount: amount.toDouble(),
             date: date ?? '',
+            documentId: doc.id, // Retrieve document ID
           ));
         } else if (amount is String) {
           transactionHistory.add(TransactionEntry(
             name: TransactionType.expense,
             amount: double.tryParse(amount) ?? 0.0,
             date: date ?? '',
+            documentId: doc.id, // Retrieve document ID
           ));
         }
       }
@@ -715,30 +714,67 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _deleteTransaction(TransactionEntry entry) async {
     try {
-      print('Deleting document with ID: ${entry.date}');
       if (entry.name == TransactionType.incomes) {
-        await incomeCollection.doc(entry.date).delete();
+        await incomeCollection.doc(entry.documentId).delete();
         print('Income deleted successfully');
       } else if (entry.name == TransactionType.expense) {
-        await expenseCollection.doc(entry.date).delete();
+        await expenseCollection.doc(entry.documentId).delete();
         print('Expense deleted successfully');
       }
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Transaction deleted successfully'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+
+      // Update UI after deletion
+      setState(() {});
     } catch (e) {
       print('Error deleting transaction: $e');
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Error deleting transaction'),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
   Future<void> _updateTransaction(TransactionEntry entry, double updatedAmount) async {
     try {
       if (entry.name == TransactionType.incomes) {
-        await incomeCollection.doc(entry.date).update({'amount': updatedAmount});
+        await incomeCollection.doc(entry.documentId).update({'amount': updatedAmount});
         print('Income updated successfully');
       } else if (entry.name == TransactionType.expense) {
-        await expenseCollection.doc(entry.date).update({'amount': updatedAmount});
+        await expenseCollection.doc(entry.documentId).update({'amount': updatedAmount});
         print('Expense updated successfully');
       }
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Transaction updated successfully'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+
+      // Update UI after update
+      setState(() {});
     } catch (e) {
       print('Error updating transaction: $e');
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Error updating transaction'),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 }
@@ -749,10 +785,12 @@ class TransactionEntry {
   final TransactionType name;
   final double amount;
   final String date;
+  final String documentId;
 
   TransactionEntry({
     required this.name,
     required this.amount,
     required this.date,
+    required this.documentId,
   });
 }

@@ -9,7 +9,7 @@ import 'wallet.dart';
 import 'profile.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+  const CustomBottomNavigationBar({super.key});
 
   @override
   State<CustomBottomNavigationBar> createState() =>
@@ -22,7 +22,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     const HomeScreen(),
     const Transaction(),
     const Wallet(),
-    Profile(),
+    const Profile(),
   ];
 
   @override
@@ -63,8 +63,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       floatingActionButtonLocation: currentTab == 0
           ? FloatingActionButtonLocation.centerDocked
           : null,
-      floatingActionButton: currentTab == 0
-          ? SpeedDial(
+      floatingActionButton: currentTab == 0 ? SpeedDial(
         animationAngle: pi,
         animatedIcon: AnimatedIcons.add_event,
         backgroundColor: const Color(0xFF2E7E78),

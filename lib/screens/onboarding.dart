@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:income_expense/screens/bottom_navigation_bar.dart';
 import 'package:income_expense/screens/login.dart';
-import 'package:income_expense/screens/homescreen.dart';
 
 class OnboardingController extends GetxController {}
 
@@ -61,7 +60,7 @@ class Onboarding extends StatelessWidget {
                       'Spend Smarter                  Save More',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Color(0xFF438883),
+                        color: const Color(0xFF438883),
                         fontSize: MediaQuery.of(context).size.width * 0.08,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
@@ -94,10 +93,15 @@ class Onboarding extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) {
-                        return CustomBottomNavigationBar();
+                        return const CustomBottomNavigationBar();
                       },
                     ));
                   },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    padding: const EdgeInsets.all(16),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                   child: const Text(
                     'Get Started',
                     style: TextStyle(
@@ -108,11 +112,6 @@ class Onboarding extends StatelessWidget {
                       height: 0.60,
                       letterSpacing: -0.36,
                     ),
-                  ),
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    padding: const EdgeInsets.all(16),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
               ),

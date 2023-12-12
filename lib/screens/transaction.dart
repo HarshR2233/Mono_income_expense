@@ -320,15 +320,12 @@ class _TransactionState extends State<Transaction> {
             Container(
               height: screenHeight * 0.3,
               width: screenWidth * 0.9,
-              child: isLoading
-                  ? const Center(
+              child: isLoading ? const Center(
                 child: CircularProgressIndicator(
                   valueColor:
                   AlwaysStoppedAnimation<Color>(Color(0xFF2E7E78)),
                 ),
-              )
-                  : selectedData.isNotEmpty
-                  ? SfCartesianChart(
+              ): selectedData.isNotEmpty ? SfCartesianChart(
                 margin: const EdgeInsets.all(0),
                 borderWidth: 0,
                 borderColor: Colors.transparent,
@@ -342,8 +339,8 @@ class _TransactionState extends State<Transaction> {
                   borderColor: Colors.transparent,
                 ),
                 primaryYAxis: NumericAxis(
-                  minimum: 9000,
-                  maximum: 25000,
+                  minimum: findMinXValue(selectedData),
+                  maximum: findMaxXValue(selectedData),
                   isVisible: false,
                   borderWidth: 0,
                   borderColor: Colors.transparent,
@@ -404,8 +401,7 @@ class _TransactionState extends State<Transaction> {
                     );
                   },
                 ),
-              )
-                  : const Center(
+              ): const Center(
                 child:  Text(
                   'No data available',
                   style: TextStyle(
@@ -451,9 +447,7 @@ class _TransactionState extends State<Transaction> {
       }
       return priceComparison;
     });
-
     List<CharData> topItems = sortedData.take(4).toList();
-
     return topItems;
   }
 }
