@@ -19,8 +19,14 @@ class Transaction extends StatefulWidget {
   @override
   State<Transaction> createState() => _TransactionState();
 }
+ValueNotifier kj = ValueNotifier(0);
 
 class _TransactionState extends State<Transaction> {
+
+  List day = ['Day', 'Week', 'Month', 'Year'];
+  int index_color = 0;
+
+
   late List<CharData> incomeData;
   late List<CharData> expenseData;
 
@@ -56,8 +62,8 @@ class _TransactionState extends State<Transaction> {
   late String selectedDropdownValue;
   late String selectedFilter;
 
-  DateTime startDate = DateTime(2023, 1, 1);
-  DateTime endDate = DateTime(2023, 12, 31);
+  DateTime startDate = DateTime(2023, 11, 1);
+  DateTime endDate = DateTime(2029, 12, 31);
 
   @override
   void initState() {
@@ -74,10 +80,14 @@ class _TransactionState extends State<Transaction> {
     setState(() {
       isLoading = true;
     });
+
+    DateTime firstDayOfMonth = DateTime(startDate.year, startDate.month, 1);
+    DateTime lastDayOfMonth = DateTime(endDate.year, endDate.month + 1, 0);
+
     QuerySnapshot incomeSnapshot = await FirebaseFirestore.instance
         .collection('incomes')
-        .where('date', isGreaterThanOrEqualTo: startDate)
-        .where('date', isLessThanOrEqualTo: endDate)
+        .where('date', isGreaterThanOrEqualTo: firstDayOfMonth)
+        .where('date', isLessThanOrEqualTo: lastDayOfMonth)
         .orderBy('date')
         .get();
 
@@ -92,8 +102,8 @@ class _TransactionState extends State<Transaction> {
 
     QuerySnapshot expenseSnapshot = await FirebaseFirestore.instance
         .collection('expense')
-        .where('date', isGreaterThanOrEqualTo: startDate)
-        .where('date', isLessThanOrEqualTo: endDate)
+        .where('date', isGreaterThanOrEqualTo: firstDayOfMonth)
+        .where('date', isLessThanOrEqualTo: lastDayOfMonth)
         .orderBy('date')
         .get();
 
@@ -114,6 +124,7 @@ class _TransactionState extends State<Transaction> {
       isLoading = false;
     });
   }
+
 
   void applyFilter() {
     if (selectedFilter == 'Days') {
@@ -217,67 +228,48 @@ class _TransactionState extends State<Transaction> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedFilter = 'Days';
-                      applyFilter();
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Days'
-                        ? const Color(0xFF438883)
-                        : Colors.transparent,
-                    onPrimary: Colors.white,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ...List.generate(
+                    4,
+                        (index) {
+                      return GestureDetector(
+                        onTap: () {
+                          applyFilter();
+                          setState(() {
+                            index_color = index;
+                            kj.value = index;
+                          });
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: index_color == index
+                                ? Color.fromARGB(255, 47, 125, 121)
+                                : Colors.white,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            day[index],
+                            style: TextStyle(
+                              color: index_color == index
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  child: const Text('Days'),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedFilter = 'Weekly';
-                      applyFilter();
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Weekly' ? const Color(0xFF438883) : Colors.transparent,
-                    onPrimary: Colors.white,
-                  ),
-                  child: const Text('Weekly'),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedFilter = 'Monthly';
-                      applyFilter();
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Monthly' ? const Color(0xFF438883) : Colors.transparent,
-                    onPrimary: Colors.white,
-                  ),
-                  child: const Text('Monthly'),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedFilter = 'Yearly';
-                      applyFilter();
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: selectedFilter == 'Yearly' ? const Color(0xFF438883) : Colors.transparent,
-                    onPrimary: Colors.white,
-                  ),
-                  child: const Text('Yearly'),
-                ),
-              ],
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 200),
@@ -339,8 +331,8 @@ class _TransactionState extends State<Transaction> {
                   borderColor: Colors.transparent,
                 ),
                 primaryYAxis: NumericAxis(
-                  minimum: findMinXValue(selectedData),
-                  maximum: findMaxXValue(selectedData),
+                  minimum: 10,
+                  maximum: 25000,
                   isVisible: false,
                   borderWidth: 0,
                   borderColor: Colors.transparent,

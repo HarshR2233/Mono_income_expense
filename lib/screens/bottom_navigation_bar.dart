@@ -5,8 +5,6 @@ import 'package:income_expense/screens/addincome.dart';
 import 'package:income_expense/screens/addexpense.dart';
 import 'homescreen.dart';
 import 'transaction.dart';
-import 'wallet.dart';
-import 'profile.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({super.key});
@@ -21,8 +19,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   final List<Widget> screens = [
     const HomeScreen(),
     const Transaction(),
-    const Wallet(),
-    const Profile(),
   ];
 
   @override
@@ -30,36 +26,28 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return Scaffold(
       body: screens[currentTab],
       bottomNavigationBar:BottomNavigationBar(
-          currentIndex: currentTab,
-          onTap: (int index) {
-            setState(() {
-              currentTab = index;
-            });
+        currentIndex: currentTab,
+        onTap: (int index) {
+          setState(() {
+            currentTab = index;
+          });
           },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.leaderboard),
-              label: 'Statistics',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet),
-              label: 'Wallet',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_2),
-              label: 'Profile',
-            ),
-          ],
-          backgroundColor: Colors.white,
-          selectedItemColor: const Color(0xFF438883),
-          unselectedItemColor: Colors.grey,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-          type: BottomNavigationBarType.fixed,
-        ),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.leaderboard),
+            label: 'Statistics',
+          ),
+        ],
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color(0xFF438883),
+        unselectedItemColor: Colors.grey,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        type: BottomNavigationBarType.fixed,
+      ),
       floatingActionButtonLocation: currentTab == 0
           ? FloatingActionButtonLocation.centerDocked
           : null,

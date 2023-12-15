@@ -115,15 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Image.asset(
-                  'assets/image/chevron.png',
-                  width: screenWidth - screenWidth * 0.1,
-                  height: 393,
-                ),
-              ],
-            ),
             Padding(
               padding: EdgeInsets.fromLTRB(screenWidth * 0.10, 315, screenWidth * 0.10, 10),
               child: FutureBuilder<double>(
@@ -768,13 +759,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print('Error updating transaction: $e');
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Error updating transaction'),
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.red,
-        ),
-      );
+
     }
   }
 }

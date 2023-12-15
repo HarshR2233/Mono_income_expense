@@ -27,7 +27,7 @@ class _AddExpenseState extends State<AddExpense> {
   Rx<DateTime> selectedDate = DateTime.now().obs;
   RxString selectedValue = 'Transfer'.obs;
 
-  List<String> dropdownItems = ['Transfer','Subcription','Ticket Booking','Bill Payment'];
+  List<String> dropdownItems = ['Transfer','Subscription','Ticket Booking','Bill Payment'];
 
   String? _validateAmount(String? value) {
     if (value == null || value.isEmpty) {
@@ -103,11 +103,6 @@ class _AddExpenseState extends State<AddExpense> {
                   left: screenWidth * 0.11,
                   child: Image.asset('assets/image/Ellipse9.png'),
                 ),
-                Positioned(
-                  top: screenHeight * 0.104,
-                  left: screenWidth * 0.840,
-                  child: Image.asset('assets/image/Group19.png'),
-                ),
                 Row(
                   children: [
                     Padding(
@@ -179,62 +174,61 @@ class _AddExpenseState extends State<AddExpense> {
                       padding: EdgeInsets.fromLTRB(screenWidth * 0.13, screenHeight * 0.225, 0, 0),
                       child: Container(
                         width: screenWidth * 0.725,
-                        child: Obx(
-                              () => DropdownButtonFormField<String>(
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  contentPadding: EdgeInsets.only(right: screenWidth * 0.01, left: screenWidth * 0.01),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(screenWidth * 0.02),
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(screenWidth * 0.02),
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(screenWidth * 0.02),
-                                    ),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(width: screenWidth * 0.001, color: Colors.red),
-                                    borderRadius: BorderRadius.circular(screenWidth * 0.01),
-                                  ),
-                                ),
-                                elevation: 1,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Select game';
-                                  } else {
-                                    return null;
-                                  }
-                                  },
-                                isExpanded: true,
-                                hint: const Text("Favourite game"),
-                                iconSize: screenWidth * 0.03,
-                                iconEnabledColor: Colors.black,
-                                icon: Icon(
-                                  Icons.arrow_drop_down_sharp,
-                                  size: screenWidth * 0.015,
-                                ),
-                                value: selectedValue.value,
-                                items: dropdownItems.map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(item),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  selectedValue(newValue ?? 'Transfer');
-                                  },
+                        child: Obx(() => DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            contentPadding: EdgeInsets.only(right: screenWidth * 0.01, left: screenWidth * 0.01),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(screenWidth * 0.02),
                               ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(screenWidth * 0.02),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: const Color(0xFF438883), width: screenWidth * 0.001),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(screenWidth * 0.02),
+                              ),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: screenWidth * 0.001, color: Colors.red),
+                              borderRadius: BorderRadius.circular(screenWidth * 0.01),
+                            ),
+                          ),
+                          elevation: 1,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Select game';
+                            } else {
+                              return null;
+                            }
+                            },
+                          isExpanded: true,
+                          hint: const Text("Favourite game"),
+                          iconSize: screenWidth * 0.03,
+                          iconEnabledColor: Colors.black,
+                          icon: Icon(
+                            Icons.arrow_drop_down_sharp,
+                            size: screenWidth * 0.015,
+                          ),
+                          value: selectedValue.value,
+                          items: dropdownItems.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            selectedValue(newValue ?? 'Transfer');
+                            },
+                        ),
                         ),
                       ),
                     ),
